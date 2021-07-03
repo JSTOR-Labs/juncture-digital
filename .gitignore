@@ -1,0 +1,9 @@
+.vscode
+.idea
+.DS_Store
+venv
+CNAME
+tmp
+creds
+utils/email-client/config.yaml
+utils/iiif-server/config.yaml
