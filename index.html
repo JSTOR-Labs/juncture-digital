@@ -418,7 +418,7 @@
         
         headRef(contentSource.acct, contentSource.repo, contentSource.ref).then(headHash => {
           if (headHash) {
-            contentSource.basePath = `/${contentSource.acct}/${contentSource.repo}`
+            if (contentSource.acct !== 'jstor-labs' || contentSource.repo !== 'juncture-digital') contentSource.basePath = `/${contentSource.acct}/${contentSource.repo}`
             contentSource.hash = headHash.slice(0,7)
             contentSource.assetsBaseUrl = `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${contentSource.hash}`
             attrsWithUrls.forEach(attr => { if (config[attr]) config[attr] = convertURL(config[attr]) })
