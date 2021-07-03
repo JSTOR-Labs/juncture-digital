@@ -17,8 +17,8 @@ Create and share interactive essays using free and open web resources
 
 ## About Juncture
 
-<video width="100%" height="100%" controls playsinline poster="https://raw.githubusercontent.com/jstor-labs/juncture/main/images/video-thumbnail.png">
-  <source src="https://raw.githubusercontent.com/jstor-labs/juncture/main/videos/Juncture-final.mp4" type="video/mp4">
+<video width="100%" height="100%" controls playsinline poster="https://raw.githubusercontent.com/jstor-labs/juncture-digital/main/images/video-thumbnail.png">
+  <source src="https://raw.githubusercontent.com/jstor-labs/juncture-digital/main/videos/Juncture-final.mp4" type="video/mp4">
     <!--
       <track label="English" kind="subtitles" srclang="en" src="https://raw.githubusercontent.com/jstor-labs/juncture/main/videos/Juncture-final.vtt" default>
     -->
