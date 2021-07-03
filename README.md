@@ -1,2 +1,2 @@
-# junecture-digital
+# juncture-digital
 Code for juncture-digital.org
