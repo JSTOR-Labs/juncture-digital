@@ -1,6 +1,6 @@
 ports:
   - port: 8088
-    onOpen: open-preview
+    onOpen: open-browser
 tasks:
   - init: pip install -r utils/requirements.txt
-    command: utils/dev-server/server.py -l info -r ..
+    command: npx http-server -p 8088

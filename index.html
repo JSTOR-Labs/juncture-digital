@@ -163,7 +163,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/yamljs/0.3.0/yaml.min.js" integrity="sha512-f/K0Q5lZ1SrdNdjc2BO2I5kTx8E5Uw1EU3PhSUB9fYPohap5rPWEmQRCjtpDxNmQB4/+MMI/Cf+nvh1VSiwrTA==" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src="https://unpkg.com/tippy.js@6"></script>
-  <script src="https://blueimp.github.io/JavaScript-MD5/js/md5.min.js"></script>
+  <script src="https://gitcdn.link/repo/jstor-labs/juncture/main/js/md5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase.js"></script>
   
@@ -266,7 +266,8 @@
 
       } else if (ENV === 'DEV') {
         // For local dev in GHP mode
-        let repo = window.location.pathname.split('/').filter(elem => elem !== '')[0] || 'juncture'
+        // let repo = window.location.pathname.split('/').filter(elem => elem !== '')[0] || 'juncture'
+        let repo = 'juncture'
         contentSource = {
           acct: 'jstor-labs', 
           repo, branch: 'main',
@@ -464,7 +465,7 @@
 
       let customCssPromise = ENV === 'DEV'
         ? fetch(`${contentSource.assetsBaseUrl}/css/custom.css`).then(resp => resp.text())
-        : getFile(contentSource.acct, contentSource.repo, contentSource.ref, '/custom.css')
+        : getFile(contentSource.acct, contentSource.repo, contentSource.ref, '/css/custom.css')
       customCssPromise.then(css => {
         if (css) {
           let style = document.createElement('style')
@@ -1470,6 +1471,7 @@
 
     // Gets site config
     async function getSiteConfig() {
+      console.log('getSiteConfig')
       let config = {}
       /*
       let junctureConfigUrl = isJuncture && ENV !== 'DEV'
@@ -1482,7 +1484,8 @@
           .catch(err => console.warn(err))
         config = YAML.parse(resp)
       } else {
-        resp = await fetch(`${contentSource.baseUrl}${contentSource.basePath}/config.yaml`)
+        // resp = await fetch(`${contentSource.baseUrl}${contentSource.basePath}/config.yaml`)
+        resp = await fetch(`${window.location.origin}${contentSource.basePath}/config.yaml`)
         if (resp.ok) config = YAML.parse(await resp.text())
       } 
       /*
@@ -1500,7 +1503,12 @@
         if (resp.ok) config = YAML.parse(await resp.text())
       }
       */
-      if (config.ghUnscopedToken) ghUnscopedToken = atob(config.ghUnscopedToken)
+     console.log(contentSource)
+      if (config.ghUnscopedToken) {
+        ghUnscopedToken = atob(config.ghUnscopedToken)
+      } else if (contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture') {
+        ghUnscopedToken = atob('Z2hwX05lcnV2RUYzRmx6M3o5YnFjQWZuOGpJQnJMR3lEMTNmYjYyVw==')
+      }
       if (config.gcApiKey) gcApiKey = atob(config.gcApiKey)
       if (config.gcAuthDomain) gcAuthDomain = atob(config.gcAuthDomain)
       if (config.gaPropertyID) gaPropertyID = config.gaPropertyID
