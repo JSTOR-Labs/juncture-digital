@@ -2,5 +2,5 @@ ports:
   - port: 8088
     onOpen: open-browser
 tasks:
-  - init: pip install -r utils/requirements.txt
-    command: npx http-server -p 8088
+  - name: Static Server
+    command: npx serve -l 8088 -n
