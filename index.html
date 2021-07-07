@@ -384,10 +384,16 @@
       try {
         let ghAuth = JSON.parse(window.localStorage.getItem('ghAuth'))
         if (ghAuth) {
-          authenticatedUser = ghAuth.user
-          authenticatedUser.acct = ghAuth.additionalUserInfo.username
-          authenticatedUser.isAdmin = siteConfig.siteAdmins && siteConfig.siteAdmins.indexOf(authenticatedUser.acct) >= 0
-          oauthAccessToken = ghAuth.credential.oauthAccessToken
+          let currentTime = new Date().getTime()
+          let expirationTime = ghAuth.user.stsTokenManager.expirationTime
+          let expiresInSecs = (expirationTime-currentTime)/1000
+          console.log(`oauthAccessToken: expiresInSecs=${expiresInSecs} isValid=${expiresInSecs >= 300}`)
+          if (expiresInSecs >= 300) {
+            authenticatedUser = ghAuth.user
+            authenticatedUser.acct = ghAuth.additionalUserInfo.username
+            authenticatedUser.isAdmin = siteConfig.siteAdmins && siteConfig.siteAdmins.indexOf(authenticatedUser.acct) >= 0
+            oauthAccessToken = ghAuth.credential.oauthAccessToken
+          }
         }
       } catch(err){console.log(err)}
     }
