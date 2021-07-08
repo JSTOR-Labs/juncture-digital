@@ -413,6 +413,12 @@
         }}
       //}
       if (gaPropertyID) ga('create', gaPropertyID, 'auto')
+      if (siteConfig.description) {
+        let el = document.createElement('meta')
+        el.name = 'description'
+        el.content = siteConfig.description
+        document.querySelector('head').appendChild(el)
+      }
       let attrsWithUrls = ['banner', 'favicon', 'logo']        
       headRef(contentSource.acct, contentSource.repo, contentSource.ref).then(headHash => {
         if (headHash) {
@@ -595,7 +601,7 @@
             } else if (action === 'view-markdown') {
               this.markdownViewer.show()
             } else if (action === 'user-guide') {
-              window.open('https://github.com/JSTOR-Labs/juncture/wiki/user-guide', '_blank')
+              window.open('https://github.com/JSTOR-Labs/juncture/wiki', '_blank')
             } else if (action === 'edit-page') {
               this.editMarkdown()
             } else if (action === 'add-page') {
