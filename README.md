@@ -19,9 +19,6 @@ Create and share interactive essays using free and open web resources
 
 <video width="100%" height="100%" controls playsinline poster="https://raw.githubusercontent.com/jstor-labs/juncture-digital/main/images/video-thumbnail.png">
   <source src="https://raw.githubusercontent.com/jstor-labs/juncture-digital/main/videos/Juncture-final.mp4" type="video/mp4">
-    <!--
-      <track label="English" kind="subtitles" srclang="en" src="https://raw.githubusercontent.com/jstor-labs/juncture/main/videos/Juncture-final.vtt" default>
-    -->
 </video>
 
 Juncture is a free-to-use, open source framework for converting simple text files into an engaging visual essay. A visual essay is an interactive and responsive web page that augments a text narrative with visual elements to provide depth and context.
@@ -35,7 +32,7 @@ With Juncture you can create a single essay or build a full website consisting o
 
 ![](/images/free-open-source.png)
 
-Juncture is open source and free to use and to modify.  Adhering to minimal computing principles, Juncture uses static files and open standards to create memorable essays.
+Juncture is open source and free to use and to modify.  Adhering to minimal computing principles, Juncture uses static files and open technologies to create memorable essays.
 
 ## Interactive, image-rich and interdisciplinary
 
@@ -47,7 +44,7 @@ Designed for narratives exploring complex and nuanced subjects, Juncture essays 
 
 ![](/images/digital-skills.png)
 
-Because it uses open standards like Markdown, IIIF, GeoJSON, D3, Timeline.js and more, Juncture is a great way to level-up your digital skills.  All you need is a Github account and a willingness to learn.
+Because it uses free and open technologies like [Wikidata](https://www/wikidata.org), [Markdown](https://www.markdownguide.org/), [IIIF](https://iiif.io), [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON), [D3](https://d3js.org/), [Timeline.js](https://timeline.knightlab.com/) and more, Juncture is a great way to level-up your digital skills.  All you need is a [Github](https://github.com) account and a willingness to learn.
 
 # Prerequisites
 <param id="prerequisites" class="cards">
