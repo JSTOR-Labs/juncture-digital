@@ -1,4 +1,4 @@
-<param ve-config component="default" class="home" layout="test" fixed-header="false" logo="/images/logo-juncture.svg">
+<param ve-config component="default" class="home" layout="test1" fixed-header="false" logo="/images/logo-juncture.svg" logins-disabled>
 <param nav label="Contact Us" action="contact-us" icon="fas fa-envelope">
 
 # 
@@ -52,23 +52,23 @@ Because it uses open standards like Markdown, IIIF, GeoJSON, D3, Timeline.js and
 # Building an interactive essay is easier than you think
 <param id="get-started" class="cards">
 
-## 1. Log in with a Github account
+## Create a Visual Essay
 
 ![](/images/github-login.png)
 
-If you don't have a Github account, create a free one at [github.com](https://github.com). Log in using the Juncture menu.
+The first step in getting acquainted with Juncture is to create a simple Visual Essay in your personal Github account.
+1. Login to Github. If you don't have a Github account, a free one can be created at [github.com](https://github.com).
+2. Create a Visual Essay using the [Visual Essay Quick Start](https://github.com/jstor-labs/juncture/wiki/Visual-Essay-Quick-Start) guide.
 
-## 2. Create a new site
+## Create a new Juncture site
 
 ![](/images/new-site.png)
 
-Select “Create a new site” from the Juncture menu. This will build a new site in a new repo on your Github account.
+In addition to creating and sharing individual Visual Essays, Juncture can be used to create a full-featured website that includes multiple Visual Essays and other content pages. 
 
-## 3. Customize your site
+1. Login to Github. If you don't have a Github account, a free one can be created at [github.com](https://github.com).
+2. Create a Visual Essay using the [Juncture Site Quick Start](https://github.com/jstor-labs/juncture/wiki/Juncture-Site-Quick-Start) guide.
 
-![](/images/customize-site.png)
-
-Browse to your new site and add a new essay by selecting a template.  Add images, maps, and other components by following Juncture’s examples and documentation.
 
 # Public or personal uses
 <param id="juncture-can" class="cards juncture-can">
