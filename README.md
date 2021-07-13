@@ -55,7 +55,7 @@ What do you need to start using Juncture?
 
 1. **An interest in visual storytelling** - Juncture makes it easy to build interactive essays that augment text with rich and engaging visualizations.
 2. **10 minutes to create your first Visual Essay** - See for yourself how quick and easy it is to create and share an interactive Visual Essay.
-3. **A (free) Github account** - Visuals Essays are stored on the Github site.  If you're not familiar with Github think of it as a file hosting service (like Dropbox or Google Drive).  It's much more that that but for our purposes it's primarily a place to store files on the web.  For a more detailed discussion of what Github is and how Juncture uses it please refer to this [page]().
+3. **A (free) Github account** - Visuals Essays are stored on the Github site.  If you're not familiar with Github think of it as a file hosting service (like Dropbox or Google Drive).  It's much more that that but for our purposes it's primarily a place to store files on the web.  For a more detailed discussion of what Github is and how Juncture uses it please refer to this [page](https://github.com/jstor-labs/juncture/wiki/Github-overview).
 
 ##
 
@@ -78,7 +78,7 @@ The [Visual Essay Quick Start](https://github.com/jstor-labs/juncture/wiki/Visua
 
 Each Visual Essay has a default stable URL that can be used for viewing and sharing the essay.  Others URLs (including using your own custom domain) for an essay can be used when an optional Juncture site is created.
 
-The [Viewing and Sharing Quick Start](https://github.com/jstor-labs/juncture/wiki/Viewing-and-Sharing-Quick-Start) guid provides simple instructions for viewing and sharing a Visual Essay.
+The [Viewing and Sharing Visual Essays](https://github.com/jstor-labs/juncture/wiki/Viewing-and-Sharing-Visual-Essays) guide provides simple instructions for accessing and sharing your Visual Essays.
 
 ## Create a Juncture site
 
