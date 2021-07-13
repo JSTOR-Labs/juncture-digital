@@ -54,21 +54,22 @@ Because it uses open standards like Markdown, IIIF, GeoJSON, D3, Timeline.js and
 
 ## Create a Visual Essay
 
-![](/images/github-login.png)
-
-The first step in getting acquainted with Juncture is to create a simple Visual Essay in your personal Github account.
-1. Login to Github. If you don't have a Github account, a free one can be created at [github.com](https://github.com).
-2. Create a Visual Essay using the [Visual Essay Quick Start](https://github.com/jstor-labs/juncture/wiki/Visual-Essay-Quick-Start) guide.
-
-## Create a new Juncture site
-
 ![](/images/new-site.png)
 
-In addition to creating and sharing individual Visual Essays, Juncture can be used to create a full-featured website that includes multiple Visual Essays and other content pages. 
+The first step in getting acquainted with Juncture is to create a simple Visual Essay in your personal Github account.
+The [Visual Essay Quick Start](https://github.com/jstor-labs/juncture/wiki/Visual-Essay-Quick-Start) guide provides step-by-step instructions that can be accomplished in less than 5 minutes.
 
-1. Login to Github. If you don't have a Github account, a free one can be created at [github.com](https://github.com).
-2. Create a Visual Essay using the [Juncture Site Quick Start](https://github.com/jstor-labs/juncture/wiki/Juncture-Site-Quick-Start) guide.
+## View and Share your Visual Essays
 
+![](/images/public-site.png)
+
+Each Visual Essay has a default stable URL that can be used for viewing and sharing the essay.  Others URLs for an essay can be used when an optional Juncture site has been created.  The [Viewing and Sharing Quick Start](https://github.com/jstor-labs/juncture/wiki/Viewing-and-Sharing-Quick-Start)
+
+## Create a Juncture site
+
+![](/images/public-site.png)
+
+Some users may want to go beyond simply creating and sharing Visual Essays.  Juncture can be used to create a full-featured website that includes multiple Visual Essays and other content pages.  The [Juncture Site Quick Start](https://github.com/jstor-labs/juncture/wiki/Juncture-Site-Quick-Start) guide provides step-by-step instructions for creating and configuring a new Juncture site.  Instructions are also provided for adding and modifying content.
 
 # Public or personal uses
 <param id="juncture-can" class="cards juncture-can">
