@@ -46,20 +46,20 @@ Designed for narratives exploring complex and nuanced subjects, Juncture essays 
 
 Because it uses free and open technologies like [Wikidata](https://www/wikidata.org), [Markdown](https://www.markdownguide.org/), [IIIF](https://iiif.io), [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON), [D3](https://d3js.org/), [Timeline.js](https://timeline.knightlab.com/) and more, Juncture is a great way to level-up your digital skills.  All you need is a [Github](https://github.com) account and a willingness to learn.
 
-# Prerequisites
+# What do you need to start using Juncture?
 <param id="prerequisites" class="cards">
 
 ##
 
-What do you need to start using Juncture?
-
-1. **An interest in visual storytelling** - Juncture makes it easy to build interactive essays that augment text with rich and engaging visualizations.
-2. **10 minutes to create your first Visual Essay** - See for yourself how quick and easy it is to create and share an interactive Visual Essay.
-3. **A (free) Github account** - Visuals Essays are stored on the Github site.  If you're not familiar with Github think of it as a file hosting service (like Dropbox or Google Drive).  It's much more that that but for our purposes it's primarily a place to store files on the web.  For a more detailed discussion of what Github is and how Juncture uses it please refer to this [page](https://github.com/jstor-labs/juncture/wiki/Github-overview).
+**An interest in visual storytelling** - Juncture makes it easy to build interactive essays that augment text with rich and engaging visualizations.
 
 ##
 
-Some kind of graphic here, maybe?
+**10 minutes to create your first Visual Essay** - See for yourself how quick and easy it is to create and share an interactive Visual Essay.
+
+##
+
+**A (free) Github account** - Visuals Essays are stored on the Github site.  If you're not familiar with Github think of it as a file hosting service (like Dropbox or Google Drive).  It's much more that that but for our purposes it's primarily a place to store files on the web.  For a more detailed discussion of what Github is and how Juncture uses it please refer to this [page](https://github.com/jstor-labs/juncture/wiki/Github-overview).
 
 # Building an interactive essay is easier than you think
 <param id="get-started" class="cards">
@@ -88,6 +88,7 @@ Some users may want to go beyond simply creating and sharing Visual Essays.  Jun
 
 The [Juncture Site Quick Start](https://github.com/jstor-labs/juncture/wiki/Juncture-Site-Quick-Start) guide provides step-by-step instructions for creating and configuring a new Juncture site.  Instructions are also provided for adding and modifying content.
 
+<!--
 # Public or personal uses
 <param id="juncture-can" class="cards juncture-can">
 
@@ -102,6 +103,7 @@ Your Juncture site will run out of Github, where it is easy to connect it to a r
 ![](/images/classroom-purposes.png)
 
 Since it runs out of Github, your Juncture site can be kept private, used for your own purposes or as part of a project-based learning exercise.
+-->
 
 # Showcase
 <param id="showcase" class="cards carousel">
