@@ -51,13 +51,19 @@ Because it uses free and open technologies like [Wikidata](https://www/wikidata.
 
 ##
 
+![](/images/new-site.png)
+
 **An interest in visual storytelling** - Juncture makes it easy to build interactive essays that augment text with rich and engaging visualizations.
 
 ##
 
+![](/images/new-site.png)
+
 **10 minutes to create your first Visual Essay** - See for yourself how quick and easy it is to create and share an interactive Visual Essay.
 
 ##
+
+![](/images/new-site.png)
 
 **A (free) Github account** - Visuals Essays are stored on the Github site.  If you're not familiar with Github think of it as a file hosting service (like Dropbox or Google Drive).  It's much more that that but for our purposes it's primarily a place to store files on the web.  For a more detailed discussion of what Github is and how Juncture uses it please refer to this [page](https://github.com/jstor-labs/juncture/wiki/Github-overview).
 
