@@ -1,4 +1,4 @@
-<param ve-config component="default" class="home" layout="test1" fixed-header="false" logo="/images/logo-juncture.svg" logins-disabled>
+<param ve-config component="default" class="home" layout="test1" fixed-header="true" logo="/images/logo-juncture.svg" logins-disabled="false" force-hamburger>
 <param nav label="Contact Us" action="contact-us" icon="fas fa-envelope">
 
 # 
