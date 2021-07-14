@@ -51,13 +51,19 @@ Because it uses free and open technologies like [Wikidata](https://www/wikidata.
 
 ##
 
+![](/images/visual-storytelling.png)
+
 **An interest in visual storytelling** - Juncture makes it easy to build interactive essays that augment text with rich and engaging visualizations.
 
 ##
 
+![](/images/ten-minutes.png)
+
 **10 minutes to create your first Visual Essay** - See for yourself how quick and easy it is to create and share an interactive Visual Essay.
 
 ##
+
+![](/images/free-github.png)
 
 **A (free) Github account** - Visuals Essays are stored on the Github site.  If you're not familiar with Github think of it as a file hosting service (like Dropbox or Google Drive).  It's much more that that but for our purposes it's primarily a place to store files on the web.  For a more detailed discussion of what Github is and how Juncture uses it please refer to this [page](https://github.com/jstor-labs/juncture/wiki/Github-overview).
 
@@ -66,7 +72,7 @@ Because it uses free and open technologies like [Wikidata](https://www/wikidata.
 
 ## Create a Visual Essay
 
-![](/images/new-site.png)
+![](/images/create-essay.png)
 
 The first step in getting acquainted with Juncture is to create a simple Visual Essay in your personal Github account.
 
@@ -74,7 +80,7 @@ The [Visual Essay Quick Start](https://github.com/jstor-labs/juncture/wiki/Visua
 
 ## View and Share your Visual Essays
 
-![](/images/public-site.png)
+![](/images/view-share.png)
 
 Each Visual Essay has a default stable URL that can be used for viewing and sharing the essay.  Others URLs (including using your own custom domain) for an essay can be used when an optional Juncture site is created.
 
@@ -82,7 +88,7 @@ The [Viewing and Sharing Visual Essays](https://github.com/jstor-labs/juncture/w
 
 ## Create a Juncture site
 
-![](/images/public-site.png)
+![](/images/juncture-site.png)
 
 Some users may want to go beyond simply creating and sharing Visual Essays.  Juncture can be used to create a full-featured website that includes multiple Visual Essays and other content pages.  
 
