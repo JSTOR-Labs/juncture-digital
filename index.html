@@ -419,14 +419,18 @@
         el.content = siteConfig.description
         document.querySelector('head').appendChild(el)
       }
-      let attrsWithUrls = ['banner', 'favicon', 'logo']        
-      headRef(contentSource.acct, contentSource.repo, contentSource.ref).then(headHash => {
-        if (headHash) {
-          contentSource.hash = headHash.slice(0,7)
-          contentSource.assetsBaseUrl = `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${contentSource.hash}`
-          attrsWithUrls.forEach(attr => { if (config[attr]) config[attr] = convertURL(config[attr]) })
-        }
-      })
+      let attrsWithUrls = ['banner', 'favicon', 'logo']
+      if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('gitpod.io') > 0 ) {
+        attrsWithUrls.forEach(attr => { if (config[attr]) config[attr] = convertURL(config[attr]) })
+      } else {
+        headRef(contentSource.acct, contentSource.repo, contentSource.ref).then(headHash => {
+          if (headHash) {
+            contentSource.hash = headHash.slice(0,7)
+            contentSource.assetsBaseUrl = `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${contentSource.hash}`
+            attrsWithUrls.forEach(attr => { if (config[attr]) config[attr] = convertURL(config[attr]) })
+          }
+        })
+      }
         
       return config
     })
