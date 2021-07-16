@@ -44,7 +44,7 @@ Designed for narratives exploring complex and nuanced subjects, Juncture essays 
 
 ![](/images/digital-skills.png)
 
-Because it uses free and open technologies like [Wikidata](https://www/wikidata.org), [Markdown](https://www.markdownguide.org/), [IIIF](https://iiif.io), [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON), [D3](https://d3js.org/), [Timeline.js](https://timeline.knightlab.com/) and more, Juncture is a great way to level-up your digital skills.  All you need is a [Github](https://github.com) account and a willingness to learn.
+Because it uses free and open technologies like [Wikidata](https://www.wikidata.org), [Markdown](https://www.markdownguide.org/), [IIIF](https://iiif.io), [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON), [D3](https://d3js.org/), [Timeline.js](https://timeline.knightlab.com/) and more, Juncture is a great way to level-up your digital skills.  All you need is a [Github](https://github.com) account and a willingness to learn.
 
 # What do you need to start using Juncture?
 <param id="prerequisites" class="cards">
