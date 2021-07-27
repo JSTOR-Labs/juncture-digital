@@ -188,7 +188,7 @@
     console.log(window.location)
     const ENV = window.location.hostname === 'localhost' || window.location.hostname.indexOf('gitpod') > 0 ? 'DEV' : 'PROD'
     let isJuncture = window.location.hostname.indexOf('juncture-digital.org') === 0 || ENV === 'DEV'
-    const junctureVersion = 'v0.4.0'
+    const junctureVersion = 'v0.4.1'
     let junctureVersionHash
 
     const referrerUrl = document.referrer
@@ -438,7 +438,7 @@
     .then(config => gcOauth())
     .then(resp => headRef('jstor-labs', 'juncture', junctureVersion, ghUnscopedToken))
     .then(hash => {
-      junctureVersionHash = hash.slice(0,7)
+      junctureVersionHash = hash ? hash.slice(0,7) : null
       console.log(`isJuncture=${isJuncture} junctureVersion=${junctureVersion} junctureVersionHash=${junctureVersionHash} referrer=${document.referrer}`)
       return getComponentsList()
     })
@@ -1559,7 +1559,7 @@
         let dirList, found
         for (let i = 0; i < pathElems.length; i++) {
           dirList = await ghDirList(url, ghToken)
-          found = dirList.tree.find(item => item.path === pathElems[i])
+          found = dirList ? dirList.tree.find(item => item.path === pathElems[i]) : null
           url = found ? found.url : null
           if (!url) break
         }
