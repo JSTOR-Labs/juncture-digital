@@ -73,11 +73,11 @@ Many location entities in Wikidata can automatically be associated with a GeoJSO
 region in addition to the latitude and longitude coordinates.  Adding the `prefer-geojson` attribute to the `ve-map` tag will result in the GeoJSON shape being
 used for Rome on the map instead of a marker.
 <param ve-entity eid="Q220">
-<param ve-map center="Q220" zoom="10" prefer-geojson>
+<param ve-map center="Q220" zoom="3" prefer-geojson>
 
 ```markdown
 <param ve-entity eid="Q220">
-<param ve-map center="Q220" zoom="10" prefer-geojson>
+<param ve-map center="Q220" zoom="3" prefer-geojson>
 ```
 
 Example map with a map title, custom base layer, 2 GeoJSON layers and an auto-generated marker with a Fontawesome icon and custom color.
