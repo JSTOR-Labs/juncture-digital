@@ -73,21 +73,21 @@ Many location entities in Wikidata can automatically be associated with a GeoJSO
 region in addition to the latitude and longitude coordinates.  Adding the `prefer-geojson` attribute to the `ve-map` tag will result in the GeoJSON shape being
 used for Rome on the map instead of a marker.
 <param ve-entity eid="Q220">
-<param ve-map center="Q220" zoom="3" prefer-geojson>
+<param ve-map center="Q220" zoom="10" prefer-geojson>
 
 ```markdown
 <param ve-entity eid="Q220">
-<param ve-map center="Q220" zoom="3" prefer-geojson>
+<param ve-map center="Q220" zoom="10" prefer-geojson>
 ```
 
-Example map with a map title, custom base layer, 2 GeoJSON layers and an auto-generated marker with a Fontawesome icon and custom color.
-<param title="Nicaragua" eid="Q811" fill="#92086D" marker-symbol="user">
+Example map showing Central America and Nicaragua with a map title, custom base layer, 2 GeoJSON layers and an auto-generated marker with a Fontawesome icon and custom color.
+<param ve-entity title="Nicaragua" eid="Q811" fill="#92086D" marker-symbol="user">
 <param ve-map title="Girolamo Benzoni's Accounts Refer to Cacao Being Grown in Nicaragua" center="12.316683, -84.946184" zoom="5" basemap="Esri_WorldPhysical">
 <param ve-map-layer geojson active title="Central American Neotropics" url="Neotropics.geojson">
 <param ve-map-layer geojson active title="Nicaragua" url="Nicaragua.geojson">
 
 ```markdown
-<param title="Nicaragua" eid="Q811" fill="#92086D" marker-symbol="user">
+<param ve-entity title="Nicaragua" eid="Q811" fill="#92086D" marker-symbol="user">
 <param ve-map title="Girolamo Benzoni's Accounts Refer to Cacao Being Grown in Nicaragua" center="12.316683, -84.946184" zoom="5" basemap="Esri_WorldPhysical">
 <param ve-map-layer geojson active title="Central American Neotropics" url="Neotropics.geojson">
 <param ve-map-layer geojson active title="Nicaragua" url="Nicaragua.geojson">
