@@ -16,8 +16,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
     allow="autoplay; fullscreen *; geolocation; microphone; camera; midi; monetization; xr-spatial-tracking; gamepad; gyroscope; accelerometer; xr">
 
 ```markdown
-<param ve-iframe
-    id="game_drop"
-    src="https://v6p9d9t4.ssl.hwcdn.net/html/3509641/index.html"
-    allow="autoplay; fullscreen *; geolocation; microphone; camera; midi; monetization; xr-spatial-tracking; gamepad; gyroscope; accelerometer; xr">
+<param ve-iframe id="game_drop" src="https://v6p9d9t4.ssl.hwcdn.net/html/3509641/index.html" allow="autoplay; fullscreen *; geolocation; microphone; camera; midi; monetization; xr-spatial-tracking; gamepad; gyroscope; accelerometer; xr">
 ```
