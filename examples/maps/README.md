@@ -6,7 +6,7 @@
        layout="vtl"
        author="JSTOR Labs team">
 
-<a class="nav" href="/examples"><i class="fas fa-arrow-circle-left"></i>Back to examples</a>
+<a class="nav" href="/"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;Back to index</a>
 
 ## Introduction
 
@@ -227,18 +227,9 @@ This map of the county of Kent in the UK uses the standard OSM basemap overlaid 
 
 ## Map with heatmap overlay {#heatmap}
 
-This example uses the [Leaflet Heatmap Layer Plugin](https://www.patrick-wied.at/static/heatmapjs/plugin-leaflet-layer.html) to add a heatmap overlay on a map.  `ve-map-layer` options:
-- **heatmap** - _required_
-- **url** - _required_ URL to dataset file, currently assumes this is a TSV tile. 
-- **radius** - _optional_ (integer, default 15) Defines the radius of your datapoints. If scaleRadius is false, radius is measured in pixels. If scaleRadius is true it's measured in the scale of the map
-- **max-opacity** - _optional_ (float, default 0.6)
-- **scale-radius** - _optional_ (boolean, default false) Defines whether the radius should be scaled to accordingly to zoom level.
-- **use-local-extrema** - _optional_ (boolean, default false) Defines whether the heatmap should use a global extrema set via setData/addData OR a local extrema (the maximum and minimum of the currently displayed viewport)
-- **max** - _optional_ (integer, default 10) Sets the upper bound of your dataset
+This example uses the [Leaflet Heatmap Layer Plugin](https://www.patrick-wied.at/static/heatmapjs/plugin-leaflet-layer.html) to add a heatmap overlay on a map.  
 <param ve-map center="-2, 118" zoom="4">
-<!--
 <param ve-map-layer heatmap url="nepenthes_horticultural_heatmap.tsv" radius="2" scale-radius="true" use-local-extrema="true" max-opacity="0.6">
--->
 
 ```markdown
 <param ve-map center="-2, 118" zoom="4">
@@ -250,19 +241,18 @@ This example uses the [Leaflet Heatmap Layer Plugin](https://www.patrick-wied.at
        max-opacity="0.6">
 ```
 
+`ve-map-layer` options:
+- **heatmap** - _required_
+- **url** - _required_ URL to dataset file, currently assumes this is a TSV tile. 
+- **radius** - _optional_ (integer, default 15) Defines the radius of your datapoints. If scaleRadius is false, radius is measured in pixels. If scaleRadius is true it's measured in the scale of the map
+- **max-opacity** - _optional_ (float, default 0.6)
+- **scale-radius** - _optional_ (boolean, default false) Defines whether the radius should be scaled to accordingly to zoom level.
+- **use-local-extrema** - _optional_ (boolean, default false) Defines whether the heatmap should use a global extrema set via setData/addData OR a local extrema (the maximum and minimum of the currently displayed viewport)
+- **max** - _optional_ (integer, default 10) Sets the upper bound of your dataset
+
 ## Map with custom markers or images {#custom-markers}
 
-This example uses a [Leaflet Icon](https://leafletjs.com/examples/custom-icons/) to put an image on the map. The basic tag is `<param ve-map-marker>` and the options are:
-- **url** - _required_ URL to image.
-- **center** - _required_ latitude and longitude coordinates for the image placement, in that order, separated by a comma. For example: `"39, 20"`
-- **size** - _required_ the size of the image in pixels, separated by a comma.
-- **circle** - when set to "true", the image is cropped to an icon-sized circle
-- **square** - when set to true, the image is cropped to an icon-sized square
-- **iconAnchor** - The coordinates of the "tip" of the icon (relative to its top left corner). The icon will be aligned so that this point is at the marker's geographical location. Centered by default.
-- **shadowUrl** - the URL to a shadow image.
-- **shadowSize** - the size of the shadow image in pixels, separated by a comma.
-- **shadowAnchor** - The coordinates of the "tip" of the shadow (relative to its top left corner) (the same as iconAnchor if not specified).
-- **className** - A custom class name to assign to both primary and shadow images. Used for custom CSS styling.
+This example uses a [Leaflet Icon](https://leafletjs.com/examples/custom-icons/) to put an image on the map. 
 <param ve-map center="2, 40" zoom="3">
 <param ve-map-marker
        url="https://leafletjs.com/examples/custom-icons/leaf-green.png"
@@ -292,3 +282,18 @@ This example uses a [Leaflet Icon](https://leafletjs.com/examples/custom-icons/)
        circle="true"
        >
 ```
+
+The tag is `<param ve-map-marker>` and the options are:
+- **url** - _required_ URL to image.
+- **center** - _required_ latitude and longitude coordinates for the image placement, in that order, separated by a comma. For example: `"39, 20"`
+- **size** - _required_ the size of the image in pixels, separated by a comma.
+- **circle** - when set to "true", the image is cropped to an icon-sized circle
+- **square** - when set to true, the image is cropped to an icon-sized square
+- **iconAnchor** - The coordinates of the "tip" of the icon (relative to its top left corner). The icon will be aligned so that this point is at the marker's geographical location. Centered by default.
+- **shadowUrl** - the URL to a shadow image.
+- **shadowSize** - the size of the shadow image in pixels, separated by a comma.
+- **shadowAnchor** - The coordinates of the "tip" of the shadow (relative to its top left corner) (the same as iconAnchor if not specified).
+- **className** - A custom class name to assign to both primary and shadow images. Used for custom CSS styling.
+
+
+
