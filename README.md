@@ -136,6 +136,9 @@ The team behind Juncture has created ample documentation and sample files to hel
 [View Documentation](https://github.com/jstor-labs/juncture/wiki)
 <param class="button">
 
+[Examples](/examples)
+<param class="button">
+
 #
 <param class="footer">
 

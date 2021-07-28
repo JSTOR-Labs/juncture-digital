@@ -2,7 +2,6 @@
 
 # Example essays
 
-Below are some sample essays:
 - [Maps](maps)
 - [Images](images)
 - [Image comparison](image-compare)
