@@ -1,6 +1,8 @@
 <a href="https://juncture-digital.org"><img src="https://gitcdn.link/repo/jstor-labs/juncture/main/images/ve-button.png"></a>
 
-# Example essays
+<param ve-config
+       title="Essay viewer examples"
+       author="JSTOR Labs team">
 
 - [Maps](maps)
 - [Images](images)
