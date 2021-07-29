@@ -1,4 +1,4 @@
-<a href="https://juncture-digital.org"><img src="https://gitcdn.link/repo/jstor-labs/juncture/main/images/ve-button.png"></a>
+<a href="https://juncture-digital.org"><img src="https://juncture-digital.org/images/ve-button.png"></a>
 
 <param ve-config
        title="Network examples"
@@ -27,8 +27,8 @@ This tag renders a basic network diagram using the D3Plus library. D3plus is a J
 This ring network diagram uses the D3Plus library. Rings are a way to view network connections focused on 1 node in the network.  This visualization shows primary and secondary connections of a specific node, and allows the user to click on a node to recenter the visualization on that selected node. The `ve-d3plus-ring` tag is used to generate this diagram and currently supports comma separated (CSV) or tab separated (TSV) delimited text files as input data. The `url` attribute is required to point to the data file. It also uses an optional `center` attribute to identify the name of the network'ss central node.
 ```html
 <param ve-d3plus-ring-network 
-       url="https://jstor-labs.github.io/ve-components/public/data/medici.tsv"
-       center="Anna Maria Luisa de' Medici">
+       url="https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/develop/data/heliconia_network_interactions.tsv"
+       center="Heliconia imbricata">
 ```
 <param ve-d3plus-ring-network 
        url="https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/develop/data/heliconia_network_interactions.tsv"
@@ -37,6 +37,8 @@ This ring network diagram uses the D3Plus library. Rings are a way to view netwo
 ## Vis.js Network
 This network diagram is rendered using the Vis.js library, a dynamic, browser based visualization JavaScript library. Examples of network graphs created in Vis.js can be seen at [https://visjs.github.io/vis-network/examples/](https://visjs.github.io/vis-network/examples/). The documentation for networks can be viewed at [https://visjs.github.io/vis-network/docs/network/](https://visjs.github.io/vis-network/docs/network/). The `ve-vis-network` tag is used to generate this graph and currently supports comma separated (CSV) or tab separated (TSV) delimited text files as input data. The `url` attribute is required to point to the data file. An optional `title` attribute can be defined to give the network graph a title. 
 ```html
-<param ve-vis-network title="Anna Maria Luisa de Medici's Network" url="https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/main/graphs/peony_medici.tsv">
+<param ve-vis-network
+       title="Anna Maria Luisa de Medici's Network"
+       url="https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/main/graphs/peony_medici.tsv">
 ```
 <param ve-vis-network title="Anna Maria Luisa de Medici's Network" url="https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/main/graphs/peony_medici.tsv">
