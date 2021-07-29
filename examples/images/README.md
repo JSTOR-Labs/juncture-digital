@@ -4,7 +4,7 @@
 <!-- Some config data for the essay -->
 <param ve-config title="Image Viewer Examples" layout="vtl">
 
-<a class="nav" href="/examples"><i class="fas fa-arrow-circle-left"></i>Back to examples</a>
+<a class="nav" href="/examples"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;Back to examples</a>
 
 # Juncture Image Viewer
 

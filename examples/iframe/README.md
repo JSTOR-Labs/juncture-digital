@@ -5,7 +5,7 @@
        layout="vertical"
        author="JSTOR Labs team">
 
-<a class="nav" href="/"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;Back to index</a>
+<a class="nav" href="/"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;Back to examples</a>
 
 ## IFrame Viewer
 

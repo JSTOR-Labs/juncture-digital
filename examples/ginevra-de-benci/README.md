@@ -2,6 +2,8 @@
 
 <param ve-config banner="https://free.iiifhosting.com/iiif/a50b36d92153db8db436cff50ab37345ad482823e756d48585829e9a20cdc2c3/pct:0,52,100,38/full/0/gray.jpg" layout="vtl" title="Ginevra de' Benci" author="Leonardo da Vinci">
 
+<a class="nav" href="/examples"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;Back to examples</a>
+
 <param ve-entity title="Leonardo da Vinci" eid="Q762">
 
 # Ginevra de' Benci
