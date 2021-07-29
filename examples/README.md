@@ -16,3 +16,4 @@
 - [More image examples using IIIF](ginevra-de-benci)
 - [Entities](entities)
 - [Custom main](custom-main)
+- [(Experimental) IFrame viewer](iframe)
