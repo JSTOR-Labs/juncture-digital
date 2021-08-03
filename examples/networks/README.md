@@ -17,19 +17,19 @@ This sample essay provides examples of different netowork graphs that can be inc
 
 ## D3Plus Basic Network
 This tag renders a basic network diagram using the D3Plus library. D3plus is a JavaScript re-usable chart library that extends the popular D3.js to enable the easy creation of visualizations.  Example diagrams can be seen at [https://d3plus.org/examples/](https://d3plus.org/examples/).  Documentation is available at [https://d3plus.org/docs/](https://d3plus.org/docs/). The `ve-d3plus-network` tag is used to generate this diagram and currently supports comma separated (CSV) or tab separated (TSV) delimited text files as input data. This tag should include the `url` attribute to point to the data file.
+To view the file used in the example as a reference, click [here](https://github.com/JSTOR-Labs/plant-humanities/blob/main/graphs/peony_medici.tsv).
 ```markdown
 <param ve-d3plus-network url="https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/main/graphs/peony_medici.tsv">
 ```
-To view the file used in the example as a reference, click [here](https://github.com/JSTOR-Labs/plant-humanities/blob/main/graphs/peony_medici.tsv).
 <param ve-d3plus-network url="https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/main/graphs/peony_medici.tsv">
 
 
 ## D3Plus Ring Network
 This ring network diagram uses the D3Plus library. Rings are a way to view network connections focused on 1 node in the network.  This visualization shows primary and secondary connections of a specific node, and allows the user to click on a node to recenter the visualization on that selected node. The `ve-d3plus-ring` tag is used to generate this diagram and currently supports comma separated (CSV) or tab separated (TSV) delimited text files as input data. The `url` attribute is required to point to the data file. It also uses an optional `center` attribute to identify the name of the network'ss central node.
+To view the file used in the example as a reference, click [here](https://github.com/JSTOR-Labs/plant-humanities/blob/main/data/heliconia_network_interactions.tsv).
 ```html
 <param ve-d3plus-ring-network url="https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/main/data/heliconia_network_interactions.tsv" center="Heliconia imbricata">
 ```
-To view the file used in the example as a reference, click [here](https://github.com/JSTOR-Labs/plant-humanities/blob/main/data/heliconia_network_interactions.tsv).
 <param ve-d3plus-ring-network 
        url="https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/main/data/heliconia_network_interactions.tsv"
        center="Heliconia imbricata">
