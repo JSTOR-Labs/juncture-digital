@@ -130,7 +130,7 @@ def add_image_data_to_manifest(manifest, image_data):
             manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service'] = {
                 '@context': 'http://iiif.io/api/image/2/context.json',
                 '@id': image_data['url'][:-1],
-                'profile': 'https://iiif.io/api/image/2/level2.json'
+                'profile': 'http://iiif.io/api/image/2/level2.json'
             }
             manifest['thumbnail'] = f'{image_data["url"]}full/150,/0/default.jpg'
         else:
@@ -271,6 +271,8 @@ def manifest(path=None):
             headers = {'ETag': etag}
             if request.method == 'GET':
                 del manifest['_id']
+                if 'service' in manifest['sequences'][0]['canvases'][0]['images'][0]['resource']:
+                    manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['profile'] = 'http://iiif.io/api/image/2/level2.json'
                 source_url = manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['@id']
                 if refresh:
                     make_iiif_image(mdb, manifest, url=source_url)
@@ -310,6 +312,10 @@ def manifest(path=None):
                 input_data_md_hash = hashlib.md5(json.dumps(metadata(**input_data), sort_keys=True).encode()).hexdigest()
                 if (image_data is not None) or (manifest_md_hash != input_data_md_hash):
                     manifest = update_manifest(mdb, manifest, image_data, **input_data)
+            else:
+                if 'service' in manifest['sequences'][0]['canvases'][0]['images'][0]['resource']:
+                    manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['profile'] = 'http://iiif.io/api/image/2/level2.json'
+
         else:
             if not can_mutate:
                 return ('Not authorized', 403)
@@ -340,7 +346,10 @@ def manifest(path=None):
         source = _source(input_data['url'])
         mid = hashlib.sha256(source.encode()).hexdigest()
         manifest = mdb['manifests'].find_one({'_id': mid})
-        return update_manifest(mdb, manifest, **input_data), 200
+        manifest = update_manifest(mdb, manifest, **input_data)
+        if 'service' in manifest['sequences'][0]['canvases'][0]['images'][0]['resource']:
+            manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['profile'] = 'http://iiif.io/api/image/2/level2.json'
+        return manifest, 200
 
 @app.route('/iiifhosting-webhook', methods=['GET', 'POST'])
 def iiifhosting_webhook():
