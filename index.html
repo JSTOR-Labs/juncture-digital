@@ -193,7 +193,7 @@
     console.log(window.location)
     const ENV = window.location.hostname === 'localhost' || window.location.hostname.indexOf('gitpod') > 0 ? 'DEV' : 'PROD'
     let isJuncture = window.location.hostname.indexOf('juncture-digital.org') === 0 || ENV === 'DEV'
-    const junctureVersion = 'v0.4.17'
+    const junctureVersion = 'v0.4.18'
     let junctureVersionHash
 
     const referrerUrl = document.referrer
@@ -1364,7 +1364,7 @@
           repo = repo || this.contentSource.repo
           ref = ref || this.contentSource.ref
           let ghToken = oauthAccessToken || ghUnscopedToken
-          console.log(`getFile: path=${path} acct=${acct} repo=${repo} ref=${ref} ghToken=${ghToken}`)
+          // console.log(`getFile: path=${path} acct=${acct} repo=${repo} ref=${ref} ghToken=${ghToken}`)
           if (ENV === 'PROD' && acct) {
             let url = `https://api.github.com/repos/${acct}/${repo}/contents${path}?ref=${ref}`
             let resp = await fetch(url, ghToken ? {headers: {Authorization:`Token ${ghToken}`}} : {})
@@ -1373,8 +1373,7 @@
               return { sha: resp.sha, content: decodeURIComponent(escape(atob(resp.content))) }
             }
           } else {
-            // let url = `${this.contentSource.baseUrl}${this.contentSource.basePath}${path}`
-            let url = `${this.contentSource.assetsBaseUrl}${path}`
+            let url = `${this.contentSource.baseUrl}${this.contentSource.basePath}${path}`
             let resp = await fetch(url)
             if (resp.ok) resp = await resp.text()
             return {content: resp}
