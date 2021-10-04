@@ -2,6 +2,8 @@
 .idea
 .DS_Store
 venv
+node_modules
+package-lock.json
 CNAME
 tmp
 creds
