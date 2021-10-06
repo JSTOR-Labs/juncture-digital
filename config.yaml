@@ -25,8 +25,8 @@ nav:
 contactForm:
   from: JSTOR Labs <labs@ithaka.org>
   to:
-  #- labs@ithakaorg.onmicrosoft.com
-  - Ron Snyder <Ron.Snyder@ithaka.org>
+  - labs@ithakaorg.onmicrosoft.com
+  # - Ron Snyder <Ron.Snyder@ithaka.org>
   subject: Juncture Contact Form
 
 #######################################################
