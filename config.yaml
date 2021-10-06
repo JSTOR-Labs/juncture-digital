@@ -7,9 +7,9 @@ logo: /images/logo-juncture.svg
 
 # When using a custom domain these fields must be updated to match
 # the account and repository name
-acct: jstor-labs
-repo: juncture-digital
-ref: main
+# acct: jstor-labs
+# repo: juncture-digital
+# ref: main
 
 ######################################################
 # Defines options shown in the header navigation menu
