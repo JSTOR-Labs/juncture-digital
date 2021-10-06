@@ -188,11 +188,12 @@
     let isJuncture = window.location.hostname.indexOf('juncture-digital.org') === 0 || ENV === 'DEV'
     const junctureVersion = 'v0.5.0'
     let junctureVersionHash
+    let qargs = window.location.href.indexOf('?') > 0 ? parseQueryString(window.location.href.split('?')[1]) : {}
 
     const referrerUrl = document.referrer
     if (referrerUrl) {
       const referrer = parseUrl(referrerUrl)
-      if ((referrer.host === 'github.com' || referrer.host === 'juncture-digital.org') && referrer.pathname.indexOf('/jstor-labs/juncture/wiki') < 0) {
+      if ((referrer.host === 'github.com' || referrer.host === 'juncture-digital.org') && referrer.pathname.indexOf('/jstor-labs/juncture/wiki') < 0 && qargs.redirect === undefined) {
         const referrerPath = referrer.pathname.slice(1).split('/')
         const ghAcct = referrerPath[0]
         const ghRepo = referrerPath[1]
@@ -200,7 +201,7 @@
         const pathStart = 4
         const pathEnd = referrerPath[referrerPath.length-1] === 'README.md' || referrerPath[referrerPath.length-1] === 'index.md' ? referrerPath.length-1 : referrerPath.length
         const ghPath = referrerPath.slice(pathStart, pathEnd).join('/').replace(/\.md$/, '')
-        const redirect = `${window.location.origin}/${ghAcct}/${ghRepo}/${ghPath}${ghBranch === 'master' || ghBranch === 'main' ? '' : '?ref=' + ghBranch}`
+        const redirect = `${window.location.origin}/${ghAcct}/${ghRepo}/${ghPath}${ghBranch === 'master' || ghBranch === 'main' ? '' : '?redirect&ref=' + ghBranch}`
         window.location = redirect
       }
     }
@@ -295,8 +296,6 @@
       }
       return contentSource
     }
-
-    let qargs = window.location.href.indexOf('?') > 0 ? parseQueryString(window.location.href.split('?')[1]) : {}
     
     // GLobal variables used to initialize Vue
     let siteConfig, contentSource, componentsList, ghUnscopedToken, oauthAccessToken, gcApiKey, gcAuthDomain, gaPropertyID, fontawesome
