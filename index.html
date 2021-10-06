@@ -192,7 +192,7 @@
     const referrerUrl = document.referrer
     if (referrerUrl) {
       const referrer = parseUrl(referrerUrl)
-      if (referrer.host === 'github.com' && referrer.pathname.indexOf('/jstor-labs/juncture/wiki') < 0) {
+      if ((referrer.host === 'github.com' || referrer.host === 'juncture-digital.org') && referrer.pathname.indexOf('/jstor-labs/juncture/wiki') < 0) {
         const referrerPath = referrer.pathname.slice(1).split('/')
         const ghAcct = referrerPath[0]
         const ghRepo = referrerPath[1]
