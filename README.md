@@ -74,19 +74,19 @@ Because it uses free and open technologies like [Wikidata](https://www.wikidata.
 
 ![create a visual essay](/images/create-essay.png)
 
-The first step in getting acquainted with Juncture is to create a simple visual essay in your personal Github account. Write an essay about a topic you like and follow [this](https://github.com/jstor-labs/juncture/wiki/Visual-Essay-Quick-Start) guide to visualize your essay. It will take about 10 minutes to prepare the interactive essay.
+The first step in getting acquainted with Juncture is to create a simple visual essay in your personal Github account. Write an essay about a topic you like and follow this [visual essay quick start guide](https://github.com/jstor-labs/juncture/wiki/Visual-Essay-Quick-Start) to visualize your essay. It will take about 10 minutes to prepare the interactive essay.
 
 ## View and Share your visual essays
 
 ![view and share visual essay](/images/view-share.png)
 
-Each visual essay has a default web address that can be used for viewing and sharing the essay.  Other URLs, including your own custom domain name can be used if you create a Juncture site. This [guide](https://github.com/jstor-labs/juncture/wiki/Viewing-and-Sharing-Visual-Essays) provides simple instructions for accessing and sharing your visual essays.
+Each visual essay has a default web address that can be used for viewing and sharing the essay.  Other URLs, including your own custom domain name can be used if you create a Juncture site. This [viewing and sharing visual essays guide](https://github.com/jstor-labs/juncture/wiki/Viewing-and-Sharing-Visual-Essays) provides simple instructions for accessing and sharing your visual essays.
 
 ## Create a Juncture site
 
 ![create a juncture site](/images/juncture-site.png)
 
-Juncture can be used to create a full-featured website that includes multiple visual essays and other content pages. This [guide](https://github.com/jstor-labs/juncture/wiki/Juncture-Site-Quick-Start) provides step-by-step instructions for creating and configuring a new Juncture site.  Instructions are also provided for adding and modifying content.
+Juncture can be used to create a full-featured website that includes multiple visual essays and other content pages. This [creating a juncture site quick start guide](https://github.com/jstor-labs/juncture/wiki/Juncture-Site-Quick-Start) provides step-by-step instructions for creating and configuring a new Juncture site.  Instructions are also provided for adding and modifying content.
 
 <!--
 # Public or personal uses
