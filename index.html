@@ -7,7 +7,7 @@
   <link href="https://unpkg.com/tippy.js@6/dist/tippy.css" rel="stylesheet"/>
   <link href="https://unpkg.com/tippy.js@6/themes/light-border.css" rel="stylesheet"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-  <title>Juncture Homepage</title>
+  <title>Juncture Digital Homepage</title>
   <style>
     [v-cloak] { display: none; }
     #header, #footer { display: none; }
@@ -184,17 +184,16 @@
 
   <script>
 
-    const ENV = window.location.hostname === 'localhost' || window.location.hostname.indexOf('gitpod') > 0 || window.location.hostname.indexOf('githubpreview') > 0 ? 'DEV' : 'PROD'
+    const ENV = window.location.port === '8088' || window.location.hostname.indexOf('8088') >= 0 ? 'DEV' : 'PROD'
     let isJuncture = window.location.hostname.indexOf('juncture-digital.org') === 0 || ENV === 'DEV'
-    const junctureVersion = 'v0.5.0'
+    const junctureVersion = 'v0.5.2'
     let junctureVersionHash
     let qargs = window.location.href.indexOf('?') > 0 ? parseQueryString(window.location.href.split('?')[1]) : {}
 
     const referrerUrl = document.referrer
     if (referrerUrl) {
       const referrer = parseUrl(referrerUrl)
-      console.log(referrer, qargs)
-      if (referrer.host === 'github.com' && referrer.pathname.indexOf('/jstor-labs/juncture/wiki') < 0 && qargs.redirect === undefined) {
+      if ((referrer.host === 'github.com' || referrer.host === 'juncture-digital.org') && referrer.pathname.indexOf('/jstor-labs/juncture/wiki') < 0) {
         const referrerPath = referrer.pathname.slice(1).split('/')
         const ghAcct = referrerPath[0]
         const ghRepo = referrerPath[1]
@@ -249,7 +248,7 @@
     async function getContentSource() {
       let contentSource
 
-      if (window.location.port === '8088' || window.location.host.indexOf('8088') === 0 || window.location.host.indexOf('juncture-digital.org') >= 0) {
+      if (window.location.port === '8088' || window.location.host.indexOf('8088') >= 0 || window.location.host.indexOf('juncture-digital.org') >= 0) {
         contentSource = {
           acct: 'jstor-labs', repo: 'juncture-digital', ref: 'main', hash: null, basePath: '', isGhpSite: false,
           baseUrl: window.location.origin, 
@@ -264,7 +263,7 @@
           }
         }
 
-      } else if (window.location.port === '8080' || window.location.host.indexOf('8080') === 0) {
+      } else if (window.location.port === '8080' || window.location.host.indexOf('8080') >= 0) {
         // For local dev in GHP mode
         // let repo = window.location.pathname.split('/').filter(elem => elem !== '')[0] || 'juncture'
         let repo = 'juncture'
@@ -378,7 +377,7 @@
       if (gaPropertyID) ga('create', gaPropertyID, 'auto')
       if (siteConfig.description) setMetaDescription(siteConfig.description)
       let attrsWithUrls = ['banner', 'favicon', 'logo']
-      if ((window.location.hostname === 'localhost' || window.location.hostname.indexOf('gitpod.io') > 0 || window.location.hostname.indexOf('githubpreview.dev') > 0) && (contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture-digital') ) {
+      if ((window.location.port === '8088' || window.location.hostname.indexOf('8088') >= 0) && (contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture-digital') ) {
         attrsWithUrls.forEach(attr => { if (config[attr]) config[attr] = convertURL(config[attr]) })
       } else {
         headRef(contentSource.acct, contentSource.repo, contentSource.ref).then(headHash => {
@@ -673,7 +672,7 @@
 
           async getMarkdown(path) {
             // if ((window.location.hostname === 'localhost' || window.location.hostname.indexOf('gitpod.io') > 0) && (contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture-digital')) {
-            if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('gitpod.io') > 0 || window.location.hostname.indexOf('githubpreview.dev') > 0) {
+            if (window.location.port === '8080' || window.location.hostname.indexOf('8080') >= 0) {
               let url = `${contentSource.baseUrl}${contentSource.basePath}${path}`
               let resp = await fetch(url)
               if (resp.ok) return await resp.text()
@@ -1061,6 +1060,7 @@
             this.viewerIsOpen = false
             if (config) {
               if (config.layout) this.layouts = config.layout.split(',').map(layout => layout === 'vtl' ? 'vertical' : layout)
+              if (config.title) document.title = this.siteConfig && this.siteConfig.title ? `${config.title} - ${this.siteConfig.title}` : config.title
               if (config.description) setMetaDescription(config.description)
             }
           },
@@ -1326,7 +1326,7 @@
     // Gets site config
     async function getSiteConfig() {
       let config = {}
-      let configUrl = window.location.port === '8088' || window.location.host.indexOf('8088') === 0
+      let configUrl = window.location.port === '8088' || window.location.host.indexOf('8088') >= 0
         ?  `${window.location.origin}/config.yaml`
         : window.location.host.indexOf('juncture-digital.org') >= 0
           ? `https://juncture-digital.org/config.yaml`
@@ -1420,8 +1420,7 @@
 
       let ref = contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture' ? junctureVersionHash : contentSource.ref
 
-      if ((window.location.hostname === 'localhost' || window.location.hostname.indexOf('gitpod') > 0 || window.location.hostname.indexOf('githubpreview.dev') > 0) && (contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture-digital')) {
-
+      if ((window.location.port === '8080' || window.location.port === '8088' || window.location.hostname.indexOf('8080') >= 0 || window.location.hostname.indexOf('8088') >= 0) && (contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture-digital')) {
         componentsList = [...componentsList, ...await listComponents(
         `${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'custom/components')]
         componentsList = [...componentsList, ...await listComponents(
