@@ -11,43 +11,11 @@
   <style>
     [v-cloak] { display: none; }
     #header, #footer { display: none; }
-    .visually-hidden {
-      color: black;
-      text-decoration: underline;
-      position: absolute;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      height: 0;
-      width: 0;
-      margin: -1px;
-      padding: 0;
-      border: 0;
-      white-space: nowrap;
-      clip-path: inset(50%);
-    }
-
-    #skipNav a:active, #skipNav a:focus {
-      width: auto;
-      height: auto;
-      visibility: visible;
-      position: static;
-    }
-
-    .visually-hidden:focus {
-      position: static;
-      overflow: visible;
-      clip: auto;
-      white-space: normal;
-      clip-path: none;
-    }
   </style>
 </head>
 <body>
 
   <div id="app" v-cloak ref="app" :class="layouts.join(' ')">
-    <div id="skipNav">
-      <a class="visually-hidden" href="#about"> Jump to main content</a>
-    </div>    
     <div id="header" ref="header">            
       <component v-bind:is="headerComponent" :active="true" :scroll-top="scrollTop"
                  :site-config="siteConfig"
@@ -218,7 +186,7 @@
 
     const ENV = window.location.port === '8088' || window.location.hostname.indexOf('8088') >= 0 ? 'DEV' : 'PROD'
     let isJuncture = window.location.hostname.indexOf('juncture-digital.org') === 0 || ENV === 'DEV'
-    const junctureVersion = 'v0.5.2'
+    const junctureVersion = 'v0.5.3'
     let junctureVersionHash
     let qargs = window.location.href.indexOf('?') > 0 ? parseQueryString(window.location.href.split('?')[1]) : {}
 
@@ -234,8 +202,7 @@
         const pathEnd = referrerPath[referrerPath.length-1] === 'README.md' || referrerPath[referrerPath.length-1] === 'index.md' ? referrerPath.length-1 : referrerPath.length
         const ghPath = referrerPath.slice(pathStart, pathEnd).join('/').replace(/\.md$/, '')
         const redirect = `${window.location.origin}/${ghAcct}/${ghRepo}/${ghPath}${ghBranch === 'master' || ghBranch === 'main' ? '' : '?ref=' + ghBranch}`
-        console.log(`redirect: ${redirect}`)
-        //window.location = redirect
+        window.location = redirect
       }
     }
     
