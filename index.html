@@ -184,7 +184,6 @@
 
   <script>
 
-    console.log(window.location)
     const ENV = window.location.port ? 'DEV' : 'PROD'
     
     let isJuncture = window.location.hostname.indexOf('juncture-digital.org') === 0 || ENV === 'DEV'
@@ -195,7 +194,7 @@
     const referrerUrl = document.referrer
     if (referrerUrl) {
       const referrer = parseUrl(referrerUrl)
-      if ((referrer.host === 'github.com' || referrer.host === 'juncture-digital.org') && referrer.pathname.indexOf('/jstor-labs/juncture/wiki') < 0) {
+      if (referrer.host === 'github.com' && referrer.pathname.indexOf('/jstor-labs/juncture/wiki') < 0) {
         const referrerPath = referrer.pathname.slice(1).split('/')
         const ghAcct = referrerPath[0]
         const ghRepo = referrerPath[1]
@@ -204,8 +203,7 @@
         const pathEnd = referrerPath[referrerPath.length-1] === 'README.md' || referrerPath[referrerPath.length-1] === 'index.md' ? referrerPath.length-1 : referrerPath.length
         const ghPath = referrerPath.slice(pathStart, pathEnd).join('/').replace(/\.md$/, '')
         const redirect = `${window.location.origin}/${ghAcct}/${ghRepo}/${ghPath}${ghBranch === 'master' || ghBranch === 'main' ? '' : '?ref=' + ghBranch}`
-        console.log(`redirect=${redirect}`)
-        // window.location = redirect
+        window.location = redirect
       }
     }
     
