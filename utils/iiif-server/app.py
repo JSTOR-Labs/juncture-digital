@@ -121,12 +121,12 @@ def add_image_data_to_manifest(manifest, image_data):
         image_data['url'] = image_data['url'].replace('http:', 'https:')
         manifest['sequences'][0]['canvases'][0]['images'][0]['resource'] = {
             '@id': image_data['external_id'],
-            '@type': 'dctypes:Image',
+            '@type': 'dcTypes:Image',
             'format': 'image/jpeg',
             'height': image_data['height'],
             'width': image_data['width']
         }
-        if image_data['status'] == 'done':
+        if 'status' not in image_data or image_data['status'] == 'done':
             manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service'] = {
                 '@context': 'http://iiif.io/api/image/2/context.json',
                 '@id': image_data['url'][:-1],
@@ -150,7 +150,7 @@ def update_manifests_with_image_data(mdb, image_data):
         manifest = add_image_data_to_manifest(manifest, image_data)
         mdb['manifests'].replace_one({'_id': manifest['_id']}, manifest)   
 
-def make_manifest_v2_1_1(mdb, mid, image_data, **kwargs):
+def make_manifest_v2_1_1(mdb, mid, image_data, dryrun=False, **kwargs):
     '''Create an IIIF presentation v2.1.1 manifest'''
     manifest = {
         '@context': 'http://iiif.io/api/presentation/2/context.json',
@@ -192,8 +192,11 @@ def make_manifest_v2_1_1(mdb, mid, image_data, **kwargs):
 
     manifest['_id'] = mid
     logger.debug(json.dumps(manifest, indent=2))
-    mdb['manifests'].insert_one(manifest)
-    return mdb['manifests'].find_one({'_id': mid})
+    if dryrun:
+        return manifest
+    else:
+        mdb['manifests'].insert_one(manifest)
+        return mdb['manifests'].find_one({'_id': mid})
 
 def metadata(**kwargs):
     md = []
@@ -253,7 +256,7 @@ def gp_proxy(path):
 @app.route('/manifest/', methods=['OPTIONS', 'POST', 'PUT'])
 def manifest(path=None):
     referrer = '.'.join(urlparse(request.referrer).netloc.split('.')[-2:]) if request.referrer else None
-    can_mutate = referrer in referrer_whitelist
+    can_mutate = referrer is None or referrer in referrer_whitelist
     if request.method == 'OPTIONS':
         return ('', 204)
     elif request.method in ('HEAD', 'GET'):
@@ -285,9 +288,11 @@ def manifest(path=None):
 
         mdb = connect_db()
         input_data = request.json
+        dryrun = request.json.pop('dryrun', 'false').lower() in ('true', '')
         if 'url' in input_data:
             input_data['url'] = input_data['url'].replace(' ', '%20')
         source = _source(input_data['url'])
+        info_json_url = input_data.get('iiif')
 
         # make manifest id using hash of url
         mid = hashlib.sha256(source.encode()).hexdigest()
@@ -296,16 +301,31 @@ def manifest(path=None):
 
         refresh = str(input_data.pop('refresh', False)).lower() in ('', 'true')
 
-        logger.info(f'manifest: method={request.method} source={source} mid={mid} found={manifest is not None} refresh={refresh} referrer={referrer} can_mutate={can_mutate}')
+        logger.info(f'manifest: method={request.method} source={source} mid={mid} found={manifest is not None} refresh={refresh} referrer={referrer} can_mutate={can_mutate} dryrun={dryrun}')
 
         if manifest:
             # logger.info(f'manifest={manifest}')
             if can_mutate:
+                image_data = None
                 if refresh or 'service' not in manifest['sequences'][0]['canvases'][0]['images'][0]['resource']:
-                    image_data = get_image_data(mdb, source)
-                    # logger.info(f'image_data={image_data}')
-                    if refresh or image_data is None or image_data['status'] != 'done':
-                        make_iiif_image(mdb, manifest, **input_data)
+                    if info_json_url:
+                        resp = requests.get(info_json_url, headers = {'Accept': 'application/json'})
+                        logger.info(f'{info_json_url} {resp.status_code}')
+                        if resp.status_code == 200:
+                            iiif_info = resp.json()
+                            logger.debug(json.dumps(iiif_info, indent=2))
+                            size = '1000,' if iiif_info['width'] >= iiif_info['height'] else ',1000'
+                            image_data = {
+                                'external_id': f'{iiif_info["@id"]}/full/{size}/0/default.jpg',
+                                'url': f'{iiif_info["@id"]}/',
+                                'height': iiif_info['height'],
+                                'width': iiif_info['width']
+                            }
+                    else:
+                        image_data = get_image_data(mdb, source)
+                        # logger.info(f'image_data={image_data}')
+                        if refresh or image_data is None or image_data['status'] != 'done':
+                            make_iiif_image(mdb, manifest, **input_data)
                 else:
                     image_data = None
                 manifest_md_hash = hashlib.md5(json.dumps(manifest.get('metadata',{}), sort_keys=True).encode()).hexdigest()
@@ -321,10 +341,13 @@ def manifest(path=None):
                 return ('Not authorized', 403)
 
             image_data = get_image_data(mdb, source)
-            if image_data is None and source.endswith('/info.json'):
-                resp = requests.get(input_data['url'], headers = {'Accept': 'application/json'})
+            logger.debug(f'image_data={image_data}')
+            if (refresh or image_data is None) and 'iiif' in input_data:
+                resp = requests.get(info_json_url, headers = {'Accept': 'application/json'})
+                logger.info(f'{info_json_url} {resp.status_code}')
                 if resp.status_code == 200:
                     iiif_info = resp.json()
+                    logger.debug(json.dumps(iiif_info, indent=2))
                     size = '1000,' if iiif_info['width'] >= iiif_info['height'] else ',1000'
                     image_data = {
                         'external_id': f'{iiif_info["@id"]}/full/{size}/0/default.jpg',
@@ -334,7 +357,7 @@ def manifest(path=None):
                     }
             if not image_data:
                 make_iiif_image(mdb, manifest, **input_data)
-            manifest = make_manifest_v2_1_1(mdb, mid, image_data, **input_data)
+            manifest = make_manifest_v2_1_1(mdb, mid, image_data, dryrun, **input_data)
         return manifest, 200
     
     elif request.method == 'PUT':
