@@ -390,7 +390,7 @@
       let attrsWithUrls = ['banner', 'favicon', 'logo']
       if (ENV === 'DEV' && (contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture-digital') ) {
         attrsWithUrls.forEach(attr => { if (config[attr]) config[attr] = convertURL(config[attr]) })
-      } else {
+      } else if (contentSource.repo) {
         headRef(contentSource.acct, contentSource.repo, contentSource.ref).then(headHash => {
           if (headHash) {
             contentSource.hash = headHash.slice(0,7)
@@ -424,25 +424,27 @@
       if (siteConfig.title) document.title = siteConfig.title
       if (fontawesome) document.querySelector('body').appendChild(makeScriptTag(fontawesome, 'anonymous'))
 
-      Promise.all([
-        fetch(`/css/main.css`).then(resp => resp.ok ? resp.text() : null),
-        getFile('jstor-labs', 'juncture', junctureVersionHash, '/css/main.css')
-      ]).then(responses => {
-        let style = document.createElement('style')
-        style.innerHTML = responses[0] || responses[1]
-        document.querySelector('head').appendChild(style)
-      })
-
-      let customCssPromise = ENV === 'DEV'
-        ? fetch(`${contentSource.assetsBaseUrl}/css/custom.css`).then(resp => resp.ok ? resp.text() : null)
-        : getFile(contentSource.acct, contentSource.repo, contentSource.ref, '/css/custom.css')
-      customCssPromise.then(css => {
-        if (css) {
-          let style = document.createElement('style')
-          style.innerHTML = css
-          document.querySelector('head').appendChild(style)
-        }
-      })
+      fetch(`/css`).then(resp => resp.ok ? resp.text() : '')
+        .then(html => {
+          let tmp = new DOMParser().parseFromString(html, 'text/html').children[0].children[1]
+          return Array.from(tmp.querySelectorAll('li a.file')).map(el => el.innerText)
+        })
+        .then(files => 
+          Promise.all([
+            ...[ files.indexOf('main.css') >= 0
+              ? fetch(`/css/main.css`).then(resp => resp.text())
+              : getFile('jstor-labs', 'juncture', 'main', '/css/main.css')
+            ],
+            ...files.filter(file => file !== 'main.css').map(file => fetch(`/css/${file}`).then(resp => resp.text()))
+          ])
+        )
+        .then(styles => {
+          styles.forEach(css => {
+            let style = document.createElement('style')
+            style.innerHTML = css
+            document.querySelector('head').appendChild(style)
+          })
+        })
 
       if (siteConfig.enableOneTrust && siteConfig.oneTrustSiteKey) {
         let el = document.createElement('script')
@@ -705,7 +707,8 @@
             if (path.slice(-1) !== '/') path += '/'
             this.path = path 
             // console.log(`loadEssay: basePath=${contentSource.basePath} path=${path} anchor=${this.anchor}`)
-            let pathsToTry = [`${path}index.md`, `${path}README.md`, `${path.slice(0,-1)}.md`]
+            // let pathsToTry = [`${path}index.md`, `${path}README.md`, `${path.slice(0,-1)}.md`]
+            let pathsToTry = [`${path}README.md`, `${path.slice(0,-1)}.md`]
             let markdown
             for (let i = 0; i < pathsToTry.length; i++) {
               markdown = await this.getMarkdown(pathsToTry[i])
@@ -1436,25 +1439,31 @@
       let ref = contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture' ? junctureVersionHash : contentSource.ref
 
       if (ENV === 'DEV' && (contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture-digital')) {
-        componentsList = [...componentsList, ...await listComponents(
-        `${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'custom/components')]
-        componentsList = [...componentsList, ...await listComponents(
-        `${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'components')]
+        componentsList = [
+          ...componentsList,
+          // ...await listComponents(`${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'custom/components')
+        ]
+        componentsList = [
+          ...componentsList,
+          ...await listComponents(`${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'components')
+        ]
       
       } else {
         
-        componentsList = [...componentsList, ...await listComponents(
-          `${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'custom/components')]
+        componentsList = [
+          ...componentsList,
+          // ...await listComponents(`${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'custom/components')
+        ]
           
-        if (contentSource.repo !== 'juncture' || contentSource.acct !== 'jstor-labs') {
-          componentsList = [...componentsList, ...await listComponents(
-            `https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`,
-            'custom/components',
-            `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`)]
-          componentsList = [...componentsList, ...await listComponents(
-            `https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`,
-            'components',
-            `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`)]
+        if (contentSource.repo && (contentSource.repo !== 'juncture' || contentSource.acct !== 'jstor-labs')) {
+          componentsList = [
+            ...componentsList, 
+            // ...await listComponents(`https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`, 'custom/components', `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`)
+          ]
+          componentsList = [
+            ...componentsList,
+            ...await listComponents(`https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`, 'components', `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`)
+          ]
         }
 
         componentsList = [...componentsList, ...await listComponents(
