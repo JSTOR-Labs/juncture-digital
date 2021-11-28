@@ -1158,7 +1158,8 @@
     })
 
     Vue.config.productionTip = false
-    if (ENV === 'DEV') Vue.config.devtools = true
+    // if (ENV === 'DEV') Vue.config.devtools = true
+    Vue.config.devtools = true
 
     // Vue components mixin that handles linking to external JS and CSS resources
     Vue.mixin({
@@ -1449,7 +1450,7 @@
         let resp = await fetch(`${url}/${root}`)
         if (resp.ok) {
           let tmp = new DOMParser().parseFromString(await resp.text(), 'text/html').children[0].children[1]
-          files = Array.from(tmp.querySelectorAll('li a.file')).map(el => el.innerText).map(fname => `${componentsBaseUrl}/${componentsRoot}/${fname}`)
+          files = Array.from(tmp.querySelectorAll('li a.file')).map(el => el.innerText).map(fname => `${baseUrl}/${componentsRoot}/${fname}`)
         }
       }
       return files
@@ -1461,43 +1462,24 @@
 
       let ref = contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture' ? junctureVersionHash : contentSource.ref
 
-      if (ENV === 'DEV' && (contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture-digital')) {
-        componentsList = [
-          ...componentsList,
-          // ...await dirList(`${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'custom/components')
-        ]
-        componentsList = [
-          ...componentsList,
-          ...await dirList(`${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'components')
-        ]
-      
+      if (ENV === 'DEV') {
+        componentsList = await dirList(`${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'components')
       } else {
-        
-        componentsList = [
-          ...componentsList,
-          // ...await dirList(`${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'custom/components')
-        ]
-          
         if (contentSource.repo && (contentSource.repo !== 'juncture' || contentSource.acct !== 'jstor-labs')) {
+          componentsList = await dirList(`https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`, 'components', `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`)
+          /*
           componentsList = [
-            ...componentsList, 
-            // ...await dirList(`https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`, 'custom/components', `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`)
+            ...await dirList(`https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`, 'components', `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`),
+            ...await dirList(`${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'components')
           ]
-          componentsList = [
-            ...componentsList,
-            ...await dirList(`https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`, 'components', `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`)
-          ]
+          */
         }
-
-        componentsList = [...componentsList, ...await dirList(
-          `${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'components')]
-
       }
 
-      componentsList = [...componentsList, ...await dirList(
-        `https://api.github.com/repos/jstor-labs/juncture/git/trees/${junctureVersionHash}`,
-        'components',
-        `https://raw.githubusercontent.com/jstor-labs/juncture/${junctureVersionHash}`)]
+      componentsList = [
+        ...componentsList, 
+        ...await dirList(`https://api.github.com/repos/jstor-labs/juncture/git/trees/${junctureVersionHash}`, 'components', `https://raw.githubusercontent.com/jstor-labs/juncture/${junctureVersionHash}`)
+      ]
         
       return componentsList
     }
