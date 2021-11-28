@@ -1467,12 +1467,6 @@
       } else {
         if (contentSource.repo && (contentSource.repo !== 'juncture' || contentSource.acct !== 'jstor-labs')) {
           componentsList = await dirList(`https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`, 'components', `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`)
-          /*
-          componentsList = [
-            ...await dirList(`https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/git/trees/${ref}`, 'components', `https://raw.githubusercontent.com/${contentSource.acct}/${contentSource.repo}/${ref}`),
-            ...await dirList(`${contentSource.baseUrl}${contentSource.isGhpSite ? contentSource.basePath : ''}`, 'components')
-          ]
-          */
         }
       }
 
