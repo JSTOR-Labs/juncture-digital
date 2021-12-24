@@ -17,7 +17,7 @@ from hashlib import sha256
 import traceback
 import getopt
 from datetime import datetime
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 
 import requests
 logging.getLogger('requests').setLevel(logging.INFO)
@@ -56,7 +56,11 @@ def get_image_size(url, **kwargs):
     '''Image size required for IIIF Hosting ingest'''
     size = None
     try:
-        resp = requests.head(url, )
+        logger.info(url)
+        resp = requests.head(
+            url, 
+            headers={'User-agent': 'Labs Python Client'}
+        )
         headers = dict([(key.lower(),value) for key, value in resp.headers.items()])
         size = int(headers.get('content-length', headers.get('content_length')))
     except:
@@ -71,40 +75,56 @@ def get_image_size(url, **kwargs):
     return size
 
 def queue_image_for_iiifhosting(mdb, **kwargs):
-    name = sha256(kwargs['url'].encode('utf-8')).hexdigest()
-    size = get_image_size(kwargs['url'])
-    logger.info(f'queue_image_for_iiifhosting: url={kwargs["url"]} name={name} size={size}')
-    if size:
-        image_data = mdb['images'].find_one({'_id': kwargs['url']})
-        if image_data:
-            image_data['source_size'] = size
+    
+    url = kwargs['url']
+    refresh = str(kwargs.get('refresh', False)).lower() == 'true'
+    image_data = mdb['images'].find_one({'_id': kwargs['url']})
+    exists = image_data is not None and requests.head(image_data['url']).status_code == 200
+    logger.debug(f'queue_image_for_iiifhosting: url={url} image_data={image_data is not None} exists={exists} refresh={refresh}')
+    if not exists or refresh:
+        size = int(kwargs['size']) if 'size' in kwargs else get_image_size(url)
+        name = kwargs['name'] if 'name' in kwargs else sha256(url.encode('utf-8')).hexdigest()
+        logger.info(f'queue_image_for_iiifhosting: url={kwargs["url"]} name={name} size={size}')
+        if size:
+            if image_data:
+                mdb['images'].update_one({'_id': url}, {'$set': {
+                    'status': 'submitted',
+                    'submitted': datetime.utcnow().isoformat()
+                }})
+            else:
+                mdb['images'].insert_one({
+                    '_id': url,
+                    'status': 'submitted',
+                    'source_size': size,
+                    'submitted': datetime.utcnow().isoformat(),
+                    'external_id': url
+                })
+            data = {
+                'email': iiifhosting_user,
+                'secure_payload': iiifhosting_token,
+                'files': [{
+                    'id': url, 
+                    'url': url, 
+                    'name': name,
+                    'size': size}]
+            }
+            # logger.info(json.dumps(data, indent=2))
+            resp = requests.post(
+                ingest_endpoint_iiifhosting,
+                headers = {
+                    'Content-type': 'application/json; charset=utf-8', 
+                    'Accept': 'application/json'
+                },
+                data = json.dumps(data))
+            if resp.status_code == 200 and resp.json().get('success') == 'Task created':
+                mdb['images'].update_one({'_id': url}, {'$set': {'status': 'pending'}})
+                return 'Processing', 202
+            else:
+                return resp.text, resp.status_code
         else:
-            mdb['images'].insert_one({
-                '_id': kwargs['url'],
-                'status': 'submitted',
-                'source_size': size,
-                'submitted': datetime.utcnow().isoformat(),
-                'external_id': kwargs['url']
-            })
-    data = {
-        'email': iiifhosting_user,
-        'secure_payload': iiifhosting_token,
-        'files': [{
-            'id': kwargs['url'], 
-            'url': kwargs['url'], 
-            'name': name,
-            'size': size}]
-    }
-    # logger.info(json.dumps(data, indent=2))
-    resp = requests.post(
-        ingest_endpoint_iiifhosting,
-        headers = {
-            'Content-type': 'application/json; charset=utf-8', 
-            'Accept': 'application/json'
-        },
-        data = json.dumps(data))
-    if resp.status_code == 200 and resp.json().get('success') == 'Task created':
-        mdb['images'].update_one({'_id': kwargs['url']}, {'$set': {'status': 'pending'}})
+            'Error: unable to determine image size', 400
+    else:
+        return image_data, 200
 
 def get_image_data(mdb, url):
     return mdb['images'].find_one({'_id': url})
@@ -256,7 +276,7 @@ def gp_proxy(path):
 @app.route('/manifest/', methods=['OPTIONS', 'POST', 'PUT'])
 def manifest(path=None):
     referrer = '.'.join(urlparse(request.referrer).netloc.split('.')[-2:]) if request.referrer else None
-    can_mutate = referrer is None or referrer in referrer_whitelist
+    can_mutate = referrer is None or referrer.startswith('localhost') or referrer in referrer_whitelist
     if request.method == 'OPTIONS':
         return ('', 204)
     elif request.method in ('HEAD', 'GET'):
@@ -374,6 +394,19 @@ def manifest(path=None):
             manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['profile'] = 'http://iiif.io/api/image/2/level2.json'
         return manifest, 200
 
+@app.route('/create-iiif-image/', methods=['POST'])
+@app.route('/create-iiif-image', methods=['POST'])
+def create_iiif_image():
+    return queue_image_for_iiifhosting(connect_db(), **request.json)
+
+@app.route('/service-endpoint/<path:url>', methods=['GET'])
+def service_endpoint(url):
+    logger.info(f'service-endpoint: url={url}')
+    mdb = connect_db()
+    image_data = mdb['images'].find_one({'_id':url})
+    logger.info(image_data)
+    return image_data if image_data else ('Not found', 404)
+
 @app.route('/iiifhosting-webhook', methods=['GET', 'POST'])
 def iiifhosting_webhook():
     if request.method == 'GET':
@@ -397,6 +430,17 @@ def iiifhosting_webhook():
                     'height': image_data['height'],
                     'width': image_data['width']
                 }
+            })
+        else:
+            mdb['images'].insert_one({
+                '_id': image_data['external_id'],
+                'status': image_data['status'],
+                'source_size': image_data['source_size'],
+                'created': datetime.utcnow().isoformat(),
+                'image_id': image_data['image_id'] if 'image_id' in image_data else image_data['external_id'],
+                'url': image_data['url'],
+                'height': image_data['height'],
+                'width': image_data['width']
             })
         update_manifests_with_image_data(mdb, image_data)
     return 'OK', 200
@@ -449,7 +493,7 @@ def _calc_region_and_size(image_data, args, type='thumbnail'):
 def thumbnail():
     action = request.path.split('/')[1]
     referrer = '.'.join(urlparse(request.referrer).netloc.split('.')[-2:]) if request.referrer else None
-    can_mutate = referrer is None or referrer in referrer_whitelist
+    can_mutate = referrer is None or referrer.startswith('localhost') or referrer in referrer_whitelist
     if request.method == 'OPTIONS':
         return ('', 204)
     elif request.method in ('HEAD', 'GET'):
@@ -499,16 +543,17 @@ def thumbnail():
                     return 'Not found', 404
     return 'Bad Request', 400
 
+defaults = {'port': 8080}
 def usage():
-    print('%s [hl:]' % sys.argv[0])
-    print('   -h --help             Print help message')
-    print('   -l --loglevel         Logging level (default=warning)')
-
+    print(f'{sys.argv[0]} [hl:p:]')
+    print(f'   -h --help         Print help message')
+    print(f'   -l --loglevel     Logging level (default=warning)')
+    print(f'   -p --port         Port (default={defaults["port"]})')
 
 if __name__ == '__main__':
-    kwargs = {}
+    kwargs = defaults
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'hl:', ['help', 'loglevel'])
+        opts, args = getopt.getopt(sys.argv[1:], 'hl:p:', ['help', 'loglevel', 'port'])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err)) # will print something like "option -a not recognized"
@@ -522,10 +567,12 @@ if __name__ == '__main__':
             elif loglevel in ('warn','warning'): logger.setLevel(logging.INFO)
             elif loglevel in ('info',): logger.setLevel(logging.INFO)
             elif loglevel in ('debug',): logger.setLevel(logging.DEBUG)
+        elif o in ('-p', '--port'):
+            kwargs['port'] = int(a)
         elif o in ('-h', '--help'):
             usage()
             sys.exit()
         else:
             assert False, 'unhandled option'
 
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, port=kwargs['port'], host='0.0.0.0')
