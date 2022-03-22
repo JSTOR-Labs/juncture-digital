@@ -12,7 +12,7 @@ Create and share interactive essays using free and open web resources
 [Get started](#get-started)
 <param class="button">
 
-#
+# About
 <param id="about" class="cards horizontal">
 
 ##
