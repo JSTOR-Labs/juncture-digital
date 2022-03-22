@@ -12,8 +12,8 @@ Create and share interactive essays using free and open web resources
 [Get started](#get-started)
 <param class="button">
 
-# About
-<param id="about" class="cards horizontal">
+#
+<param id="about" class="cards">
 
 ##
 <video width="100%" height="100%" controls playsinline poster="https://raw.githubusercontent.com/jstor-labs/juncture-digital/main/images/video-thumbnail.png">
