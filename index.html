@@ -1210,7 +1210,7 @@
           } else {
             e = document.createElement('script')
             e.src = url
-            e.type='text/javascript'
+            e.type = url.indexof('visual-essays.esm.js') > 0 ? 'module' : 'text/javascript'
           }
           e.addEventListener('load', callback)
           document.getElementsByTagName('head')[0].appendChild(e)
