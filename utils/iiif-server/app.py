@@ -75,16 +75,15 @@ def get_image_size(url, **kwargs):
     return size
 
 def queue_image_for_iiifhosting(mdb, **kwargs):
-    
     url = kwargs['url']
     refresh = str(kwargs.get('refresh', False)).lower() == 'true'
-    image_data = mdb['images'].find_one({'_id': kwargs['url']})
-    exists = image_data is not None and requests.head(image_data['url']).status_code == 200
-    logger.debug(f'queue_image_for_iiifhosting: url={url} image_data={image_data is not None} exists={exists} refresh={refresh}')
+    image_data = mdb['images'].find_one({'_id': url})
+    exists = image_data is not None and image_data['url'] and requests.head(image_data['url']).status_code == 200
+    logger.info(f'queue_image_for_iiifhosting: url={url} image_data={image_data is not None} exists={exists} refresh={refresh}')
     if not exists or refresh:
         size = int(kwargs['size']) if 'size' in kwargs else get_image_size(url)
         name = kwargs['name'] if 'name' in kwargs else sha256(url.encode('utf-8')).hexdigest()
-        logger.info(f'queue_image_for_iiifhosting: url={kwargs["url"]} name={name} size={size}')
+        logger.info(f'queue_image_for_iiifhosting: url={url} name={name} size={size}')
         if size:
             if image_data:
                 mdb['images'].update_one({'_id': url}, {'$set': {
@@ -129,7 +128,7 @@ def queue_image_for_iiifhosting(mdb, **kwargs):
 def get_image_data(mdb, url):
     return mdb['images'].find_one({'_id': url})
 
-def make_iiif_image(mdb, manifest=None, **kwargs):
+def make_iiif_image(mdb, **kwargs):
     queue_image_for_iiifhosting(mdb, **kwargs)
 
 def to_isodate(s):
@@ -215,7 +214,10 @@ def make_manifest_v2_1_1(mdb, mid, image_data, dryrun=False, **kwargs):
     if dryrun:
         return manifest
     else:
-        mdb['manifests'].insert_one(manifest)
+        if mdb['manifests'].find_one({'_id': mid}):
+            mdb['manifests'].replace_one({'_id': manifest['_id']}, manifest)  
+        else: 
+            mdb['manifests'].insert_one(manifest)
         return mdb['manifests'].find_one({'_id': mid})
 
 def metadata(**kwargs):
@@ -248,7 +250,7 @@ def _source(url):
         acct, repo, ref = path_elems[:3]
         path = f'/{"/".join(path_elems[3:])}'
         logger.info(f'GitHub image: hostname={_url.hostname} acct={acct} repo={repo} ref={ref} path={path}')
-        return f'https://{_url.hostname}/{acct}/{repo}/main{path}'
+        return f'https://{_url.hostname}/{acct}/{repo}/{ref}/{path}'
     else:
         return url
 
@@ -298,7 +300,7 @@ def manifest(path=None):
                     manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['profile'] = 'http://iiif.io/api/image/2/level2.json'
                 source_url = manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['@id']
                 if refresh:
-                    make_iiif_image(mdb, manifest, url=source_url)
+                    make_iiif_image(mdb, url=source_url)
                 return (manifest, 200, headers)
             else: # HEAD
                 return ('', 204, headers)
@@ -345,7 +347,7 @@ def manifest(path=None):
                         image_data = get_image_data(mdb, source)
                         # logger.info(f'image_data={image_data}')
                         if refresh or image_data is None or image_data['status'] != 'done':
-                            make_iiif_image(mdb, manifest, **input_data)
+                            make_iiif_image(mdb, refresh=True, **input_data)
                 else:
                     image_data = None
                 manifest_md_hash = hashlib.md5(json.dumps(manifest.get('metadata',{}), sort_keys=True).encode()).hexdigest()
@@ -376,7 +378,7 @@ def manifest(path=None):
                         'width': iiif_info['width']
                     }
             if not image_data:
-                make_iiif_image(mdb, manifest, **input_data)
+                make_iiif_image(mdb, **input_data)
             manifest = make_manifest_v2_1_1(mdb, mid, image_data, dryrun, **input_data)
         return manifest, 200
     
