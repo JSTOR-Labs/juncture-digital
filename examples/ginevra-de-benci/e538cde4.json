@@ -42,27 +42,5 @@
     "@context": "http://www.w3.org/ns/anno.jsonld",
     "id": "examples/ginevra-de-benci/e538cde4/ea1e931",
     "creator": "a3b5125"
-  },
-  {
-    "type": "Annotation",
-    "body": [
-      {
-        "type": "TextualBody",
-        "value": "eye",
-        "purpose": "commenting"
-      }
-    ],
-    "target": {
-      "source": "https://api.nga.gov/iiif/8f29e3c9-a289-4d53-abf0-31a66e9e98fa",
-      "selector": {
-        "type": "FragmentSelector",
-        "conformsTo": "http://www.w3.org/TR/media-frags/",
-        "value": "xywh=pixel:12794.5419921875,8056.68505859375,3942.7197265625,2706.60009765625"
-      },
-      "id": "examples/ginevra-de-benci/e538cde4"
-    },
-    "@context": "http://www.w3.org/ns/anno.jsonld",
-    "id": "examples/ginevra-de-benci/e538cde4/8b3d95a",
-    "creator": "a3b5125"
   }
 ]
