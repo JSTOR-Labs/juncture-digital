@@ -13,7 +13,7 @@
       "selector": {
         "type": "FragmentSelector",
         "conformsTo": "http://www.w3.org/TR/media-frags/",
-        "value": "xywh=pixel:4139.31494140625,6641.8408203125,4997.86962890625,2802.767578125"
+        "value": "xywh=pixel:4139.31494140625,6641.8408203125,16073.73583984375,2776.8935546875"
       },
       "id": "examples/ginevra-de-benci/e538cde4"
     },
