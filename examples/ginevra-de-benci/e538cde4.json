@@ -1,0 +1,24 @@
+[
+  {
+    "type": "Annotation",
+    "body": [
+      {
+        "type": "TextualBody",
+        "value": "test",
+        "purpose": "commenting"
+      }
+    ],
+    "target": {
+      "source": "https://api.nga.gov/iiif/8f29e3c9-a289-4d53-abf0-31a66e9e98fa",
+      "selector": {
+        "type": "FragmentSelector",
+        "conformsTo": "http://www.w3.org/TR/media-frags/",
+        "value": "xywh=pixel:4139.31494140625,6641.8408203125,4997.86962890625,2802.767578125"
+      },
+      "id": "examples/ginevra-de-benci/e538cde4"
+    },
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "examples/ginevra-de-benci/e538cde4/481001e",
+    "creator": "a3b5125"
+  }
+]
