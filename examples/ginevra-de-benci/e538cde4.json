@@ -64,5 +64,27 @@
     "@context": "http://www.w3.org/ns/anno.jsonld",
     "id": "https://api.visual-essays.net/annotation/jstor-labs/juncture-digital/examples/ginevra-de-benci/e538cde4/444dd8c",
     "creator": "a3b5125"
+  },
+  {
+    "type": "Annotation",
+    "body": [
+      {
+        "type": "TextualBody",
+        "value": "test",
+        "purpose": "commenting"
+      }
+    ],
+    "target": {
+      "source": "https://api.nga.gov/iiif/8f29e3c9-a289-4d53-abf0-31a66e9e98fa",
+      "selector": {
+        "type": "FragmentSelector",
+        "conformsTo": "http://www.w3.org/TR/media-frags/",
+        "value": "xywh=pixel:10051.9697265625,4168.869140625,6050.0087890625,3512.08349609375"
+      },
+      "id": "jstor-labs/juncture-digital/examples/ginevra-de-benci/e538cde4"
+    },
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "https://api.visual-essays.net/annotation/jstor-labs/juncture-digital/examples/ginevra-de-benci/e538cde4/eb29700",
+    "creator": "a3b5125"
   }
 ]
