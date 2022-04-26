@@ -1,4 +1,4 @@
-<param ve-config component="default" class="home" layout="test1" fixed-header="true" logo="/images/juncture-logo-jl.svg" logins-disabled="false" force-hamburger>
+<param ve-config component="default" class="home" layout="test1" fixed-header="true" logo="https://raw.githubusercontent.com/jstor-labs/juncture-digital/main/images/juncture-logo-jl.svg" logins-disabled="false" force-hamburger>
 <param nav label="Contact Us" action="contact-us" icon="fas fa-envelope">
 
 # 
