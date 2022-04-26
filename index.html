@@ -27,7 +27,7 @@
                  :is-juncture="isJuncture"
                  :is-authenticated="authenticatedUser !== null && loginsEnabled"
                  :is-admin="isAdminUser"
-                 :version="junctureVersion"
+                 :version="junctureRef"
                  :do-action-callback="doActionCallback"
                  :component-name="`${this.componentPrefix}header`"
                  @do-action="doAction"
@@ -63,7 +63,7 @@
         :is-authenticated="authenticatedUser !== null && loginsEnabled"
         :is-admin="isAdminUser"
         :do-action-callback="doActionCallback"
-        :version="junctureVersion"
+        :version="junctureRef"
         @set-entities="entities = $event"
         @set-params="params = $event"
         @set-items="items = $event"
@@ -199,12 +199,12 @@
     const junctureHostname = 'beta.juncture-digital.org'    
     const junctureAcct = 'jstor-labs'
     const junctureRepo = 'juncture-digital'
+    const junctureRef = 'beta'
 
     console.log(`junctureHostname=${junctureHostname} junctureAcct=${junctureAcct} junctureRepo=${junctureRepo}`)
 
     let isJuncture = window.location.hostname.indexOf(junctureHostname) === 0 || ENV === 'DEV'
-    const junctureVersion = 'main'
-    let junctureVersionHash
+    let junctureRefHash
     let qargs = window.location.href.indexOf('?') > 0 ? parseQueryString(window.location.href.split('?')[1]) : {}
 
     const referrerUrl = document.referrer
@@ -268,7 +268,7 @@
       if (window.location.host.indexOf(junctureHostname) >= 0) {
         let isGhpSite = junctureHostname.indexOf('github.io') > 0
         contentSource = {
-          acct: junctureAcct, repo: junctureRepo, ref: 'main', hash: null, basePath: isGhpSite ? `/${junctureRepo}` : '', isGhpSite,
+          acct: junctureAcct, repo: junctureRepo, ref: junctureRef, hash: null, basePath: isGhpSite ? `/${junctureRepo}` : '', isGhpSite,
           //baseUrl: `${window.location.origin}${isGhpSite ? '/'+junctureRepo : ''}`, 
           //assetsBaseUrl: `${window.location.origin}${isGhpSite ? '/'+junctureRepo : ''}`
           baseUrl: window.location.origin, 
@@ -427,10 +427,10 @@
       return config
     })
     .then(config => gcOauth())
-    .then(resp => headRef('jstor-labs', 'juncture', junctureVersion, ghUnscopedToken))
+    .then(resp => headRef('jstor-labs', 'juncture', junctureRef, ghUnscopedToken))
     .then(hash => {
-      junctureVersionHash = hash ? hash.slice(0,7) : null
-      // console.log(`ENV=${ENV} junctureVersion=${junctureVersion} junctureVersionHash=${junctureVersionHash} referrer=${document.referrer}`)
+      junctureRefHash = hash ? hash.slice(0,7) : null
+      // console.log(`ENV=${ENV} junctureRef=${junctureRef} junctureRefHash=${junctureRefHash} referrer=${document.referrer}`)
       return getComponentsList()
     })
     .then(clist => {
@@ -510,7 +510,7 @@
           contentSource,
           componentsList,
           isJuncture,
-          junctureVersion,
+          junctureRef,
           path: '/',
           mdPath: '',
           mdDir: '/',
@@ -659,7 +659,7 @@
           async doSiteCreate() {
             this.formProcessingStatus = 'processing'
             this.formProcessingMessage = 'Creating site...'
-            await this.createSite(this.authenticatedUser.acct, this.newRepo, junctureVersion)
+            await this.createSite(this.authenticatedUser.acct, this.newRepo, junctureRef)
             let siteUrl = `https://${this.authenticatedUser.acct}.github.io/${this.newRepo}`
             // this.formProcessingMessage = `New Juncture site created at <a href="${siteUrl}">${siteUrl}</a>`
             this.formProcessingMessage = `New Juncture site created.`
@@ -1520,7 +1520,7 @@
     async function getComponentsList() {
       let componentsList = []
 
-      let ref = contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture' ? junctureVersionHash : contentSource.ref
+      let ref = contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture' ? junctureRefHash : contentSource.ref
 
       if (ENV === 'DEV') {
         componentsList = Object.values(await dir('/components'))
@@ -1536,8 +1536,8 @@
 
       componentsList = [
         ...componentsList,
-        ...Object.values(await dir('/components', {acct: junctureAcct, repo: junctureRepo, hash: 'main'})),
-        ...Object.values(await dir('/components', {acct: 'jstor-labs', repo: 'juncture', hash: junctureVersionHash}))
+        ...Object.values(await dir('/components', {acct: junctureAcct, repo: junctureRepo, hash: junctureRef})),
+        ...Object.values(await dir('/components', {acct: 'jstor-labs', repo: 'juncture', hash: junctureRefHash}))
       ]
 
       return componentsList
