@@ -1,0 +1,4 @@
+#app.vertical {
+    grid-template-columns: 1fr 50%;
+    grid-template-rows: auto 1fr;
+  }
