@@ -199,11 +199,12 @@
     const junctureHostname = 'beta.juncture-digital.org'    
     const junctureAcct = 'jstor-labs'
     const junctureRepo = 'juncture-digital'
-    const junctureRef = 'beta'
+    const junctureDigitalRef = 'beta'
 
     console.log(`junctureHostname=${junctureHostname} junctureAcct=${junctureAcct} junctureRepo=${junctureRepo}`)
 
     let isJuncture = window.location.hostname.indexOf(junctureHostname) === 0 || ENV === 'DEV'
+    const junctureRef = 'main'
     let junctureRefHash
     let qargs = window.location.href.indexOf('?') > 0 ? parseQueryString(window.location.href.split('?')[1]) : {}
 
@@ -268,7 +269,7 @@
       if (window.location.host.indexOf(junctureHostname) >= 0) {
         let isGhpSite = junctureHostname.indexOf('github.io') > 0
         contentSource = {
-          acct: junctureAcct, repo: junctureRepo, ref: junctureRef, hash: null, basePath: isGhpSite ? `/${junctureRepo}` : '', isGhpSite,
+          acct: junctureAcct, repo: junctureRepo, ref: junctureDigitalRef, hash: null, basePath: isGhpSite ? `/${junctureRepo}` : '', isGhpSite,
           //baseUrl: `${window.location.origin}${isGhpSite ? '/'+junctureRepo : ''}`, 
           //assetsBaseUrl: `${window.location.origin}${isGhpSite ? '/'+junctureRepo : ''}`
           baseUrl: window.location.origin, 
@@ -1520,7 +1521,9 @@
     async function getComponentsList() {
       let componentsList = []
 
-      let ref = contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture' ? junctureRefHash : contentSource.ref
+      let ref = contentSource.acct === 'jstor-labs' && contentSource.repo === 'juncture'
+        ? junctureRefHash
+        : contentSource.ref
 
       if (ENV === 'DEV') {
         componentsList = Object.values(await dir('/components'))
@@ -1536,7 +1539,7 @@
 
       componentsList = [
         ...componentsList,
-        ...Object.values(await dir('/components', {acct: junctureAcct, repo: junctureRepo, hash: junctureRef})),
+        ...Object.values(await dir('/components', {acct: junctureAcct, repo: junctureRepo, hash: junctureDigitalRef})),
         ...Object.values(await dir('/components', {acct: 'jstor-labs', repo: 'juncture', hash: junctureRefHash}))
       ]
 
