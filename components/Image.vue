@@ -30,7 +30,7 @@ module.exports = {
     viewerItems() { return this.items.filter(item => item.viewer === 've-image') },
     manifestUrls() { return this.viewerItems.map(item => item.manifest || item.src ? item.manifest || item.src : `/${item.url}`) },
     user() { return this.contentSource.acct },
-    basePath() { return this.contentSource.basePath.split('/').filter(elem => elem).slice(this.contentSource.isGhpSite ? 2 : 1).join('/') },
+    basePath() { return this.contentSource.basePath.split('/').filter(elem => elem).slice(this.contentSource.isGhpSite ? 1 : 0).join('/') },
     path() { return `${this.basePath}${this.mdDir}` }
   },
   mounted() { this.loadDependencies(this.dependencies, 0, this.init) }
