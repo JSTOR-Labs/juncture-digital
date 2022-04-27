@@ -3,7 +3,7 @@
 
     <ve-image :user="user" :anno-base="path" height="100%" width="100%">
       <ul>
-        <li v-for="(manifestUrl, idx) in manifestUrls" :key="idx">{{manifestUrl}}</li>
+        <li v-for="(item, idx) in imageData" :key="idx">{{item}}</li>
       </ul>
     </ve-image>
 
@@ -28,7 +28,13 @@ module.exports = {
   computed: {
     containerStyle() { return { height: this.viewerIsActive ? '100%' : '0' } },
     viewerItems() { return this.items.filter(item => item.viewer === 've-image') },
-    manifestUrls() { return this.viewerItems.map(item => item.manifest || item.src ? item.manifest || item.src : `/${item.url}`) },
+    imageData() { return this.viewerItems.map(item => {
+      let entry = item.manifest || item.src ? item.manifest || item.src : `/${item.url}`
+      if (item.fit) entry += ` ${item.fit}`
+      if (item.region) entry += ` ${item.region}`
+      return entry
+    }) 
+    },
     user() { return this.contentSource.acct },
     basePath() { return this.contentSource.basePath.split('/').filter(elem => elem).slice(this.contentSource.isGhpSite ? 1 : 0).join('/') },
     path() { return `${this.basePath}${this.mdDir}` }
