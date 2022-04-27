@@ -1,7 +1,7 @@
 <template>
   <div :style="containerStyle">
 
-    <ve-image :user="user" :anno-base="path" height="100%">
+    <ve-image :user="user" :anno-base="path" height="100%" height="100%">
       <ul>
         <li v-for="(manifestUrl, idx) in manifestUrls" :key="idx">{{manifestUrl}}</li>
       </ul>
