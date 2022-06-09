@@ -6,18 +6,16 @@ logging.basicConfig(format='%(asctime)s : %(filename)s : %(levelname)s : %(messa
 logger = logging.getLogger(__name__)
 
 import os
-import sys
-import math
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 import json
 import yaml
+import math
 import hashlib
 from hashlib import sha256
 import traceback
-import getopt
 from datetime import datetime
-from urllib.parse import urlparse, quote
+from urllib.parse import urlparse
 
 import requests
 logging.getLogger('requests').setLevel(logging.INFO)
@@ -56,7 +54,6 @@ def get_image_size(url, **kwargs):
     '''Image size required for IIIF Hosting ingest'''
     size = None
     try:
-        logger.info(url)
         resp = requests.head(
             url, 
             headers={'User-agent': 'Labs Python Client'}
@@ -326,13 +323,15 @@ def manifest(path=None):
         logger.info(f'manifest: method={request.method} source={source} mid={mid} found={manifest is not None} refresh={refresh} referrer={referrer} can_mutate={can_mutate} dryrun={dryrun}')
 
         if manifest:
+            
             # logger.info(f'manifest={manifest}')
             if can_mutate:
                 image_data = None
-                if refresh or 'service' not in manifest['sequences'][0]['canvases'][0]['images'][0]['resource']:
+                if refresh or \
+                    'service' not in manifest['sequences'][0]['canvases'][0]['images'][0]['resource'] or \
+                    'cdn.visual-essays.app' in manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['@id']:
                     if info_json_url:
                         resp = requests.get(info_json_url, headers = {'Accept': 'application/json'})
-                        logger.info(f'{info_json_url} {resp.status_code}')
                         if resp.status_code == 200:
                             iiif_info = resp.json()
                             logger.debug(json.dumps(iiif_info, indent=2))
@@ -366,7 +365,7 @@ def manifest(path=None):
             logger.debug(f'image_data={image_data}')
             if (refresh or image_data is None) and 'iiif' in input_data:
                 resp = requests.get(info_json_url, headers = {'Accept': 'application/json'})
-                logger.info(f'{info_json_url} {resp.status_code}')
+                logger.debug(f'{info_json_url} {resp.status_code}')
                 if resp.status_code == 200:
                     iiif_info = resp.json()
                     logger.debug(json.dumps(iiif_info, indent=2))
@@ -420,19 +419,23 @@ def iiifhosting_webhook():
         # if image_data['status'] == 'done':
         mdb = connect_db()
         found = mdb['images'].find_one({'_id': image_data['external_id']})
-        logger.info(f'found={found}')
+        logger.info(f'found={found} status={image_data["status"]}')
         if found:
-            mdb['images'].update_one(
-                {'_id': image_data['external_id']},
-                {'$set': {
-                    'status': image_data['status'],
-                    'created': datetime.utcnow().isoformat(),
-                    'image_id': image_data['image_id'] if 'image_id' in image_data else image_data['external_id'],
-                    'url': image_data['url'],
-                    'height': image_data['height'],
-                    'width': image_data['width']
-                }
-            })
+            if image_data['status'] == 'deleted':
+                to_delete = mdb['images'].find_one({'image_id': image_data['image_id']})
+                resp = (mdb['images'].delete_one({'image_id': image_data['image_id']}))
+            else:
+                mdb['images'].update_one(
+                    {'_id': image_data['external_id']},
+                    {'$set': {
+                        'status': image_data['status'],
+                        'created': datetime.utcnow().isoformat(),
+                        'image_id': image_data['image_id'] if 'image_id' in image_data else image_data['external_id'],
+                        'url': image_data['url'],
+                        'height': image_data['height'],
+                        'width': image_data['width']
+                    }
+                })
         else:
             mdb['images'].insert_one({
                 '_id': image_data['external_id'],

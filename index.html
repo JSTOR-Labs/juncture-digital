@@ -174,8 +174,9 @@
   <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-auth.js"></script> 
   <script src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.73/dist/shoelace.js" type="module"></script>
-  <script src="https://unpkg.com/visual-essays/dist/visual-essays/visual-essays.esm.js" type="module"></script>
-  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js" type="text/javascript"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/debug.addIndicators.min.js" type="text/javascript"></script>
+
   <!-- This is used for deep linking of Single Page Apps when hosted with GitHub Pages -->
   <script type="text/javascript">
     (function(l) {
@@ -192,11 +193,15 @@
   </script>
 
   <script type="module">
+    const ENV = window.location.port || window.location.host.indexOf('githubpreview.dev') > 0 ? 'DEV' : 'PROD'
+
+    let wcScript = document.createElement('script')
+    wcScript.src = `${ENV == 'DEV' ? 'http://localhost:3333/build' : 'https://unpkg.com/visual-essays/dist/visual-essays'}/visual-essays.esm.js`
+    wcScript.setAttribute('type', 'module')
+    document.querySelector('body').appendChild(wcScript)
 
     import { defineCustomElements } from 'https://unpkg.com/visual-essays/loader/index.js'
-    
-    const ENV = window.location.port || window.location.host.indexOf('githubpreview.dev') > 0 ? 'DEV' : 'PROD'
-    
+        
     //const junctureHostname = 'juncture-digital.org'
     const junctureHostname = 'beta.juncture-digital.org'    
     const junctureAcct = 'jstor-labs'
@@ -281,7 +286,6 @@
         let pathElems = window.location.pathname.split('/').filter(elem => elem !== '')
         if (pathElems.length >= 2) {
           let ghRepoInfo = await githubRepoInfo(pathElems[isGhpSite ? 1 : 0], pathElems[isGhpSite ? 2 : 1])
-          console.log('ghRepoInfo', ghRepoInfo)
           if (ghRepoInfo) {
             contentSource = {
               ...contentSource, 
@@ -301,6 +305,7 @@
           basePath: '', 
           assetsBaseUrl: `${window.location.origin}`
         }
+        await getSiteConfig(contentSource)
         let pathElems = window.location.pathname.split('/').filter(elem => elem !== '')
         if (pathElems.length >= 2) {
           let ghRepoInfo = await githubRepoInfo(pathElems[0], pathElems[1])
@@ -369,7 +374,8 @@
     async function getFile(acct, repo, ref, path, token) {
       token = token || oauthAccessToken || ghUnscopedToken
       let content
-      let resp = await fetch(`https://api.github.com/repos/${acct}/${repo}/contents${path}?ref=${ref}`, {headers: {Authorization:`Token ${token}`}})
+      let resp = await fetch(`https://api.github.com/repos/${acct}/${repo}/contents${path}?ref=${ref}`, {
+        headers: {Authorization:`Token ${token}`}})
       if (resp.ok) {
         resp = await resp.json()
         content = decodeURIComponent(escape(atob(resp.content)))
@@ -719,7 +725,8 @@
               if (resp.ok) return await resp.text()
             } else {
               let url = `https://api.github.com/repos/${contentSource.acct}/${contentSource.repo}/contents${path}?ref=${contentSource.ref}`
-              let resp = await fetch(url, this.ghToken ? {cache: 'no-cache', headers: {Authorization:`Token ${this.ghToken}`}} : {})
+              let resp = await fetch(url, this.ghToken ? {
+                cache: 'no-cache', headers: {Authorization:`Token ${this.ghToken}`}} : {})
               if (resp.ok) {
                 resp = await resp.json()
                 return decodeURIComponent(escape(atob(resp.content)))
@@ -1465,16 +1472,14 @@
     // Determines if Github repo exists
     async function githubRepoInfo(acct, repo) {
       let ghInfo
-        let ghToken = oauthAccessToken || ghUnscopedToken
-        let resp = await fetch(`https://api.github.com/repos/${acct}/${repo}`,
+      let ghToken = oauthAccessToken || ghUnscopedToken
+      let resp = await fetch(`https://api.github.com/repos/${acct}/${repo}`,
                                ghToken ? { headers: {Authorization: `Token ${ghToken}`}} : {} )
-        if (resp.ok) {
-          resp = await resp.json()
-          ghInfo = {acct, repo, branch: resp.default_branch, ref: qargs.ref || resp.default_branch}
-        } else {
-          console.log(resp.status)
-        }
-      console.log(`githubRepoInfo: acct=${acct} $repo=${repo}`, ghInfo)
+      if (resp.ok) {
+        resp = await resp.json()
+        ghInfo = {acct, repo, branch: resp.default_branch, ref: qargs.ref || resp.default_branch}
+      }
+      // console.log(`githubRepoInfo: acct=${acct} repo=${repo}`, ghInfo)
       return ghInfo
 
     }
@@ -1528,13 +1533,17 @@
         : contentSource.ref
 
       if (ENV === 'DEV') {
-        componentsList = Object.values(await dir('/components'))
+        componentsList = [
+          ...Object.values(await dir('/custom/components')),
+          ...Object.values(await dir('/components')),
+        ]
       }
       
       if (contentSource.repo && (contentSource.repo !== 'juncture' || contentSource.acct !== 'jstor-labs')) {
         let componentsBaseDir = 
         componentsList = [
           ...componentsList, 
+          ...Object.values(await dir('/custom/components', contentSource)),
           ...Object.values(await dir('/components', contentSource))
        ]
       }

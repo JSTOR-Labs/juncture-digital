@@ -1,7 +1,7 @@
 <template>
   <div :style="containerStyle">
 
-    <ve-image :user="user" :anno-base="path" height="100%" width="100%">
+    <ve-image :user="user" :anno-base="path" style="height:100%;">
       <ul>
         <li v-for="(item, idx) in imageData" :key="idx">{{item}}</li>
       </ul>
