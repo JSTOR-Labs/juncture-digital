@@ -283,6 +283,7 @@
           assetsBaseUrl: window.location.origin
         }
         console.log('contentSource', contentSource)
+        await getSiteConfig(contentSource)
         let pathElems = window.location.pathname.split('/').filter(elem => elem !== '')
         if (pathElems.length >= 2) {
           let ghRepoInfo = await githubRepoInfo(pathElems[isGhpSite ? 1 : 0], pathElems[isGhpSite ? 2 : 1])
