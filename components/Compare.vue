@@ -1,7 +1,7 @@
 <template>
   <div :style="containerStyle">
 
-    <ve-image :compare="mode">
+    <ve-image :compare="mode" shoelace="true">
       <ul>
         <li v-for="(image, idx) in images" :key="idx">{{image.manifest || image.src}}{{image.region ? ' '+image.region : ''}}</li>
       </ul>
