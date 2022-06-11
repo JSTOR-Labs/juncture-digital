@@ -25,7 +25,7 @@ module.exports = {
   }),
   computed: {
     containerStyle() { return { height: this.viewerIsActive ? '100%' : '0' } },
-    images() { return this.items.filter(item => item.viewer === 've-compare') },
+    images() { return this.items.filter(item => item.viewer === 've1-compare') },
     mode() { let firstItemWithMode = this.images.find(item => item.compare)
              return firstItemWithMode ? firstItemWithMode.compare : 'curtain'
     }
