@@ -12,13 +12,20 @@ module.exports = {
   data: () => ({
     html: ''
   }),
-  computed: {},
+  computed: {
+    staticBase() {
+      return location.hostname === 'localhost' ? 'http://localhost:8080/static' : 'https://visual-essays.github.io/web-app/static'
+    },
+    apiHost() {
+      return location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://api.visual-essays.net'
+    }
+  },
   mounted() {
     console.log(`${this.$options.name}.mounted path=${this.path}`)
     document.getElementById('app').classList.add('simple-essay')
-    this.addStylesheet('https://visual-essays.github.io/web-app/static/css/main.css')
-    this.addStylesheet('https://visual-essays.github.io/web-app/static/css/default-theme.css')
-    this.addStylesheet('https://visual-essays.github.io/web-app/static/css/default-layout.css')
+    this.addStylesheet(`${this.staticBase}/css/main.css`)
+    this.addStylesheet(`${this.staticBase}/css/default-theme.css`)
+    this.addStylesheet(`${this.staticBase}/css/default-layout.css`)
   },
   methods: {
     addStylesheet(url) {
@@ -32,14 +39,14 @@ module.exports = {
       if (mainJs) mainJs.parentElement.removeChild(mainJs)
       const script = document.createElement('script')
       script.type = 'text/javascript'
-      script.src = `${location.hostname === 'localhost' ? 'http://localhost:8080' : 'https://visual-essays.net'}/static/js/main.js`
+      script.src = `${this.staticBase}/js/main.js`
       document.getElementsByTagName('body')[0].appendChild(script)
     }
   },
   watch: {
     markdown: {
       handler: function (markdown) {
-        fetch(`https://api.visual-essays.net/html/?base=${this.path}`,{
+        fetch(`${this.apiHost}/html/?base=${this.path}`,{
           method:'POST',
           body: markdown
         })

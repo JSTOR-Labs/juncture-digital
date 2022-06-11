@@ -14,7 +14,7 @@ RUN set -e; \
 WORKDIR /usr/src/app
 
 ADD app.py .
-add config.yaml .
+add creds.yaml .
 
 ENV PORT 8080
 

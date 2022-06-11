@@ -1232,6 +1232,9 @@
       props: {
         componentName: String
       },
+      data: () => ({
+        dirCache: {}
+      }),
       methods: {
         loadDependencies(dependencies, i, callback) {
           if (i === 0) {
@@ -1297,6 +1300,39 @@
           }
           return objArray
         },
+        async dir(root, ghSource) {
+          let cacheKey = ghSource ? `${ghSource.acct}/${ghSource.repo}/${ghSource.hash || ghSource.ref}${root}` : root
+          // console.log(`dir: root=${root} cacheKey=${cacheKey} inCache=${dirCache[cacheKey] !== undefined}`)
+          if (!this.dirCache[cacheKey]) {
+            let files = {}
+            if (ghSource) {
+              let url = `https://api.github.com/repos/${ghSource.acct}/${ghSource.repo}/git/trees/${ghSource.hash || ghSource.ref}`
+              let ghToken = oauthAccessToken || ghUnscopedToken
+              let pathElems = root.split('/').filter(pe => pe)
+              let _dirList, found
+              for (let i = 0; i < pathElems.length; i++) {
+                _dirList = await ghDirList(url, ghToken)
+                found = _dirList ? _dirList.tree.find(item => item.path === pathElems[i]) : null
+                url = found ? found.url : null
+                if (!url) break
+              }
+              if (url) {
+                _dirList = await ghDirList(url, ghToken)
+                files = Object.fromEntries(_dirList.tree.map(item => [item.path, `https://raw.githubusercontent.com/${ghSource.acct}/${ghSource.repo}/${ghSource.hash || ghSource.ref}${root}/${item.path}`]))
+              }
+            } else {
+              let rootUrl = `${contentSource.baseUrl}${root}`
+              let resp = await fetch(rootUrl)
+              if (resp.ok) {
+                let tmp = new DOMParser().parseFromString(await resp.text(), 'text/html').children[0].children[1]
+                files = Object.fromEntries(Array.from(tmp.querySelectorAll('li a.file')).map(el => [el.innerText, `${rootUrl}/${el.innerText}`]))
+              }
+            }
+            this.dirCache[cacheKey] = files
+          }
+          return this.dirCache[cacheKey]
+        },
+
         async getFile(path, acct, repo, ref) {
           acct = acct || this.contentSource.acct
           repo = repo || this.contentSource.repo
@@ -1538,20 +1574,19 @@
           ...Object.values(await dir('/custom/components')),
           ...Object.values(await dir('/components')),
         ]
-      }
       
-      if (contentSource.repo && (contentSource.repo !== 'juncture' || contentSource.acct !== 'jstor-labs')) {
-        let componentsBaseDir = 
-        componentsList = [
-          ...componentsList, 
-          ...Object.values(await dir('/custom/components', contentSource)),
-          ...Object.values(await dir('/components', contentSource))
-       ]
+      } else if (contentSource.repo && (contentSource.repo !== 'juncture' || contentSource.acct !== 'jstor-labs')) {
+          let componentsBaseDir = 
+          componentsList = [
+            ...componentsList, 
+            ...Object.values(await dir('/custom/components', contentSource)),
+            ...Object.values(await dir('/components', contentSource))
+        ]
       }
 
       componentsList = [
         ...componentsList,
-        ...Object.values(await dir('/components', {acct: junctureAcct, repo: junctureRepo, hash: junctureDigitalRef})),
+        // ...Object.values(await dir('/components', {acct: junctureAcct, repo: junctureRepo, hash: junctureDigitalRef})),
         ...Object.values(await dir('/components', {acct: 'jstor-labs', repo: 'juncture', hash: junctureRefHash}))
       ]
 
@@ -1630,10 +1665,16 @@
     }
 
     async function sendmail(options) {
-      let resp = await fetch(`https://sendmail.${junctureHostname}/`, {
-        method: 'POST', body: JSON.stringify(options),
+      // let resp = await fetch(`https://sendmail.${junctureHostname}/`, {
+      let url = 'https://sendmail.juncture-digital.org/'
+      let body = JSON.stringify(options)
+      console.log('sendmail', url, body)
+      let resp = await fetch(url, {
+        method: 'POST',
+        body,
         headers: {'Content-Type': 'application/json', Accept: 'application/json'},
       })
+      console.log(resp)
       return await resp.json()
     }
         

@@ -7,6 +7,7 @@ package-lock.json
 CNAME
 tmp
 creds
+creds.yaml
 utils/email-client/config.yaml
 utils/iiif-server/config.yaml
 index.xml

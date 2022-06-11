@@ -10,7 +10,7 @@ gcloud config set run/region us-central1
 
 rm -rf tmp
 mkdir tmp
-rsync -va --exclude=venv --exclude=__pycache__ app.py config.yaml Dockerfile tmp
+rsync -va --exclude=venv --exclude=__pycache__ app.py creds.yaml Dockerfile tmp
 
 cd tmp
 gcloud builds submit --tag gcr.io/${GCP_PROJECT}/${GCR_SERVICE}
