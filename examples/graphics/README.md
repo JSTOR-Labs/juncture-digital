@@ -22,7 +22,7 @@ This section displays a GIF with the following markdown. Most other image format
 ```
 <param ve-graphic fit="contain" url="https://media.giphy.com/media/G0Odfjd78JTpu/giphy.gif">
 
-###
+## Adding a Title
 An optional `title` attribute can be added to the graphic tag to display a caption.
 ```html
 <param ve-graphic img="https://upload.wikimedia.org/wikipedia/commons/a/ad/SunflowerModel.svg" title="Sunflower">
