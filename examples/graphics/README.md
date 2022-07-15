@@ -15,11 +15,6 @@ The Graphic viewer is used to display images, GIFs, and SVGs. This component is 
 ```
 <param ve-graphic img="https://upload.wikimedia.org/wikipedia/commons/a/ad/SunflowerModel.svg">
 
-## video
-
-The work has been in the collection of the Mauritshuis in The Hague since 1902 and has been the subject of various 
-literary treatments. In 2006, the Dutch public selected it as the most beautiful painting in the Netherlands.
-<param ve-video id="ST_3wN3lEFo">
 
 ## GIF example
 This section displays a GIF with the following markdown. Most other image formats, such as JPEG and PNG, are also supported.
