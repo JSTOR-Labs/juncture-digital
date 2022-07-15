@@ -15,6 +15,13 @@ The Graphic viewer is used to display images, GIFs, and SVGs. This component is 
 ```
 <param ve-graphic img="https://upload.wikimedia.org/wikipedia/commons/a/ad/SunflowerModel.svg">
 
+## GIF example
+This section displays a GIF with the following markdown. Most other image formats, such as JPEG and PNG, are also supported.
+```html
+<param ve-graphic fit="contain" url="https://media.giphy.com/media/G0Odfjd78JTpu/giphy.gif">
+```
+<param ve-graphic fit="contain" url="https://media.giphy.com/media/G0Odfjd78JTpu/giphy.gif">
+
 ###
 An optional `title` attribute can be added to the graphic tag to display a caption.
 ```html
