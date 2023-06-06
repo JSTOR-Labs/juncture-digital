@@ -4,7 +4,7 @@
        title="Essay viewer examples"
        author="JSTOR Labs team">
 
-- [Maps](maps)
+- [Maps](./maps)
 - [Images](images)
 - [Image comparison](image-compare)
 - [Networks](networks)
